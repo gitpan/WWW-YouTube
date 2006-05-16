@@ -1,9 +1,9 @@
 ---
 name: WWW-YouTube
-version: 2006.0515
+version: 2006.0516
 author:
   - 'Eric R. Meyers <ermeyers@adelphia.net>'
-abstract: YouTube Developer Interface
+abstract: Interface to www.youtube.com
 license: perl
 resources:
   license: http://dev.perl.org/licenses/
@@ -12,6 +12,7 @@ build_requires:
 provides:
   WWW::YouTube:
     file: lib/WWW/YouTube.pm
+    version: 0.00
   WWW::YouTube::HTML:
     file: lib/WWW/YouTube/HTML.pm
   WWW::YouTube::HTML::API:

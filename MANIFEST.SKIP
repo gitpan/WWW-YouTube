@@ -5,8 +5,8 @@
 ^blibdirs$
 ^Build$
 ^_build/
-bin/create
-bin/dist
-.+kdev
-templates
-[.]pl
+CVS/
+^www_youtube_yyy_mmdd
+^_bin/
+[.]bak$
+[.]pl$

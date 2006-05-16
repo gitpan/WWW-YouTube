@@ -23,22 +23,27 @@ my @tests = glob File::Spec->catfile( 't', '*.pl.t' );
 
 push( @tests, glob File::Spec->catfile( 't', 'use_me', '*.pl.t' ) );
 
-my %params =
-(
-   'NAME' => 'WWW-YouTube',
+requires( 'perl' => '5.005' );
 
-);
+my $param =
+{
+   'NAME'  => 'WWW-YouTube',
+   'AUTHOR' => 'Eric R. Meyers <ermeyers@adelphia.net>',
+   'VERSION' => Date::Format::time2str( '%Y.%m%d', time() ),
+   'LICENSE' => 'perl',
+   'ABSTRACT' => 'Interface to www.youtube.com',
 
-##requires( 'perl' => '5.005' );
+};
 
-name( $params{'NAME'} );
+name( $param->{'NAME'} );
+author( $param->{'AUTHOR'} );
+version( $param->{'VERSION'} );
+license( $param->{'LICENSE'} );
+abstract( $param->{'ABSTRACT'} );
 
-##fixme##
-license( 'perl' );
+##none##all_from( 'lib/WWW/YouTube.pm' );
 
-my $TIME = time(); version( Date::Format::time2str( '%Y.%m%d', $TIME ) ); system( "$FindBin::Bin/bin/create_www_youtube.plx $TIME" ); ## sync
-
-all_from( 'lib/WWW/YouTube.pm' );
+system( "$FindBin::Bin/_bin/create_www_youtube.plx $param->{'VERSION'}" ); ## sync
 
 my @missing;
 
@@ -58,8 +63,9 @@ if ( @missing )
 
     print <<"EOT";
 
-$params{'NAME'} likes to have a lot of test modules for some of its tests.
-The following are modules that would be nice to have, but not required.
+$param->{'NAME'}-$param->{'VERSION'} likes to have a lot of test modules for some of its tests.
+
+The following are modules that would be nice to have, but are not required:
 
 @missing
 

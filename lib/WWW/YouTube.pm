@@ -14,13 +14,13 @@ use 5.005;
 
 require Date::Format;
 
-our $VERSION = Date::Format::time2str( "%Y.%m%d", time ); ## (YYYY.MMDD)
+our $YYYY_MMDD = Date::Format::time2str( "%Y.%m%d", time() );
 
 #program version
 #my $VERSION="0.1";
 
 #For CVS , use following line
-##my $VERSION=sprintf("%d.%02d", q$Revision: 1.1 $ =~ /(\d+)\.(\d+)/);
+our $VERSION = sprintf("%d.%02d", q[Revision: $YYYY_MMDD ] =~ /(\d+)\.(\d+)/);
 
 BEGIN {
 

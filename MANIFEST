@@ -1,9 +1,6 @@
 Build.PL
 ChangeLog
 COPYING
-CVS/Entries
-CVS/Repository
-CVS/Root
 inc/Module/Install.pm
 inc/Module/Install/Base.pm
 inc/Module/Install/Build.pm
@@ -27,11 +24,13 @@ lib/WWW/YouTube/XML.pm
 lib/WWW/YouTube/XML/API.pm
 Makefile.PL
 MANIFEST
-MANIFEST.bak
 MANIFEST.SKIP
 META.yml
 public_keys/ERMEYERS2005.pub
 public_keys/PAUSE2003.pub
 README
 SIGNATURE
+t/test0.pl.t
+t/use_me/test0.pl.t
+templates/perl
 SIGNATURE    Added here by Module::Build
