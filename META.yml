@@ -1,0 +1,31 @@
+---
+name: WWW-YouTube
+version: 2006.0515
+author:
+  - 'Eric R. Meyers <ermeyers@adelphia.net>'
+abstract: YouTube Developer Interface
+license: perl
+resources:
+  license: http://dev.perl.org/licenses/
+build_requires:
+  Test::More: 0.34
+provides:
+  WWW::YouTube:
+    file: lib/WWW/YouTube.pm
+  WWW::YouTube::HTML:
+    file: lib/WWW/YouTube/HTML.pm
+  WWW::YouTube::HTML::API:
+    file: lib/WWW/YouTube/HTML/API.pm
+  WWW::YouTube::ML:
+    file: lib/WWW/YouTube/ML.pm
+  WWW::YouTube::ML::API:
+    file: lib/WWW/YouTube/ML/API.pm
+    version: 1.01
+  WWW::YouTube::XML:
+    file: lib/WWW/YouTube/XML.pm
+  WWW::YouTube::XML::API:
+    file: lib/WWW/YouTube/XML/API.pm
+generated_by: Module::Build version 0.28
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.2.html
+  version: 1.2
