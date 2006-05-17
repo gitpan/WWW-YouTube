@@ -27,7 +27,7 @@ BEGIN {
 
 } ## end BEGIN
 
-require WWW::MyYouTube::XML::API; ## NOTE: I need WWW::MyYouTube secrets
+require WWW::YouTube::Com; ## NOTE: I need WWW::YouTube secrets
 
 require WWW::YouTube::HTML::API; ## NOTE: HTML/XML crossover
 
@@ -305,7 +305,7 @@ sub WWW::YouTube::XML::API::ua_central
    {
       $rpc[ 0 ] = $request[ 0 ]; ## and, off we go.
 
-      $rpc[ 1 ]{'dev_id'} = $WWW::YouTube::XML::API::ua->string( $WWW::MyYouTube::XML::API::dev_id );
+      $rpc[ 1 ]{'dev_id'} = $WWW::YouTube::XML::API::ua->string( $WWW::YouTube::Com::dev_id );
 
    } ## end if
 
@@ -364,7 +364,7 @@ sub WWW::YouTube::XML::API::ua_central
 
       $rpc[ 0 ] = $request[ 0 ]; ## OK, here we go.
 
-      $rpc[ 1 ]{'dev_id'} = $WWW::YouTube::XML::API::ua->string( $WWW::MyYouTube::XML::API::dev_id );
+      $rpc[ 1 ]{'dev_id'} = $WWW::YouTube::XML::API::ua->string( $WWW::YouTube::Com::dev_id );
 
       $rpc[ 1 ]{'user'} = $WWW::YouTube::XML::API::ua->string( $request[ 1 ]{'user'} );
 
@@ -446,7 +446,7 @@ sub WWW::YouTube::XML::API::ua_central
 
       $rpc[ 0 ] = $request[ 0 ]; ## and, off we go.
 
-      $rpc[ 1 ]{'dev_id'} = $WWW::YouTube::XML::API::ua->string( $WWW::MyYouTube::XML::API::dev_id );
+      $rpc[ 1 ]{'dev_id'} = $WWW::YouTube::XML::API::ua->string( $WWW::YouTube::Com::dev_id );
 
       ##debug##      $rpc[ 1 ]{'debug'} = $WWW::YouTube::XML::API::ua->string( ${$ithink} . ' xmlrpc return ' . $debug++ ) if ( $debug );
 
@@ -2469,7 +2469,7 @@ undef( $api ); ## I served my many purposes, again
 ##
 sub WWW::YouTube::XML::API::demo
 {
-   my $request = shift || { 'request' => { 'user' => $WWW::MyYouTube::HTML::API::user } };
+   my $request = shift || { 'request' => { 'user' => $WWW::YouTube::Com::user } };
 
    $request = $request->{'request'} if ( defined( $request->{'request'} ) );
 

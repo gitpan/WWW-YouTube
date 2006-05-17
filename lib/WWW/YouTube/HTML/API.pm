@@ -29,7 +29,7 @@ BEGIN {
 
 } ## end BEGIN
 
-require WWW::MyYouTube::HTML::API; ## NOTE: I need WWW::MyYouTube secrets
+require WWW::YouTube::Com; ## NOTE: I need WWW::YouTube::Com secrets
 
 require WWW::YouTube::XML::API; ## NOTE: HTML/XML crossover
 
@@ -124,8 +124,10 @@ push( @WWW::YouTube::HTML::API::EXPORT_OK,
 ## NOTE: Getopts hasn't set the options yet. (all flags = 0 right now)
 ##
 
+##debug## printf( "fb=%s, ur=%s\n", $FindBin::Bin, $WWW::YouTube::Com::user );
+
 $WWW::YouTube::HTML::API::cookie_file = $FindBin::Bin .
-                                   "/lwpcookies_${WWW::MyYouTube::HTML::API::user}.txt";
+                                        "/lwpcookies_$WWW::YouTube::Com::user.txt";
 
 ##debug##unlink( $WWW::YouTube::HTML::API::cookie_file );
 
@@ -174,8 +176,8 @@ if ( ! -f $WWW::YouTube::HTML::API::cookie_file )
    my %request_form =
    (
       'current_form' => 'loginForm',
-      'username' => $WWW::MyYouTube::HTML::API::user,
-      'password' => $WWW::MyYouTube::HTML::API::pass,
+      'username' => $WWW::YouTube::Com::user,
+      'password' => $WWW::YouTube::Com::pass,
       'action_login' => 'Log In',
    );
 

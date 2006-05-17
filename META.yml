@@ -1,6 +1,6 @@
 ---
 name: WWW-YouTube
-version: 2006.0516
+version: 2006.0517
 author:
   - 'Eric R. Meyers <ermeyers@adelphia.net>'
 abstract: Interface to www.youtube.com
@@ -13,6 +13,8 @@ provides:
   WWW::YouTube:
     file: lib/WWW/YouTube.pm
     version: 0.00
+  WWW::YouTube::Com:
+    file: lib/WWW/YouTube/Com.pm
   WWW::YouTube::HTML:
     file: lib/WWW/YouTube/HTML.pm
   WWW::YouTube::HTML::API:

@@ -5,8 +5,13 @@
 ^blibdirs$
 ^Build$
 ^_build/
-CVS/
-^www_youtube_yyy_mmdd
+##added
 ^_bin/
+[.].+~$
 [.]bak$
+[.]kdev.+$
+^templates/
+CVS/
 [.]pl$
+[.]tar$
+[.]tar.gz$

@@ -20,7 +20,7 @@ our $YYYY_MMDD = Date::Format::time2str( "%Y.%m%d", time() );
 #my $VERSION="0.1";
 
 #For CVS , use following line
-our $VERSION = sprintf("%d.%02d", q[Revision: $YYYY_MMDD ] =~ /(\d+)\.(\d+)/);
+our $VERSION = sprintf("%d.%02d", "Revision: $YYYY_MMDD" =~ /(\d+)\.(\d+)/);
 
 BEGIN {
 

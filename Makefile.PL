@@ -25,9 +25,13 @@ push( @tests, glob File::Spec->catfile( 't', 'use_me', '*.pl.t' ) );
 
 requires( 'perl' => '5.005' );
 
+requires( qw(
+) );
+
 my $param =
 {
-   'NAME'  => 'WWW-YouTube',
+   'NAME' => 'WWW-YouTube',
+   'CPANID' => 'ERMEYERS',
    'AUTHOR' => 'Eric R. Meyers <ermeyers@adelphia.net>',
    'VERSION' => Date::Format::time2str( '%Y.%m%d', time() ),
    'LICENSE' => 'perl',
@@ -41,9 +45,9 @@ version( $param->{'VERSION'} );
 license( $param->{'LICENSE'} );
 abstract( $param->{'ABSTRACT'} );
 
-##none##all_from( 'lib/WWW/YouTube.pm' );
+all_from( 'lib/WWW/YouTube.pm' );
 
-system( "$FindBin::Bin/_bin/create_www_youtube.plx $param->{'VERSION'}" ); ## sync
+system( "$FindBin::Bin/_bin/create_www_youtube.plx $param->{'VERSION'}" );
 
 my @missing;
 
@@ -75,9 +79,9 @@ EOT
 
 locate_gpg();
 
-feature( 'Shell.pm', '-default' => 0, recommendsi( qw( Shell ) ) ) unless can_run( 'sh' );
+feature( 'Shell.pm', '-default' => 0, recommends( qw( Shell ) ) ) unless can_run( 'sh' );
 
-##auto_install( 'prerequisites_policy' => 'follow' );
+auto_install( 'prerequisites_policy' => 'follow' );
 
 build_requires( 'Test::More' => 0.34 );
 
@@ -117,11 +121,11 @@ sub locate_gpg
 
       return ( 1 ) if grep { /^--installdeps/ } @ARGV;
 
-      if ( 1 || prompt( "Import PAUSE and author keys to GnuPG?", 'y' ) =~ /^y/i )
+      if ( prompt( "Import CPAN Author $param->{'CPANID'}'s public key to GnuPG?", 'n' ) =~ /^y/i )
       {
-         print 'Importing... ';
+         print 'Importing public key to GnuPG ... ';
 
-         system 'gpg', '--quiet', '--import', glob('public_keys/*.pub');
+         system 'gpg', '--quiet', '--import', glob('public_keys/'.$param->{'CPANID'}.'*.pub');
 
          print "done.\n";
 
@@ -131,7 +135,7 @@ sub locate_gpg
 
    } ## end if
 
-   print "GnugPG not found anywhere in your PATH, \"eek,\" (said Audrey Tang).\n";
+   print 'GnugPG not found anywhere in your PATH, "eek," said Mr. Audrey Tang.'."\n";
 
    return;
 
