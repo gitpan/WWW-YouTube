@@ -1,12 +1,33 @@
 ---
 name: WWW-YouTube
-version: 2006.0517
+version: 2006.0519
 author:
   - 'Eric R. Meyers <ermeyers@adelphia.net>'
 abstract: Interface to www.youtube.com
 license: perl
 resources:
   license: http://dev.perl.org/licenses/
+requires:
+  DBI: 0
+  Data::Dumper: 0
+  Date::Format: 0
+  Encode: 0
+  File::Basename: 0
+  FindBin: 0
+  Frontier::Client: 0
+  HTML::TreeBuilder: 0
+  HTTP::Cookies: 0
+  HTTP::Request::Common: 0
+  IO::File: 0
+  IO::Zlib: 0
+  LWP::Simple: 0
+  LWP::UserAgent: 0
+  SQL::Statement: 0
+  String::Approx: 0
+  Term::ReadLine: 0
+  Text::Wrap: 0
+  XML::Dumper: 0
+  XML::Parser: 0
 build_requires:
   Test::More: 0.34
 provides:

@@ -39,7 +39,7 @@ BEGIN {
 
 require WWW::YouTube::ML;
 
-use File::Basename;
+require File::Basename;
 
 %WWW::YouTube::opts =
 (
