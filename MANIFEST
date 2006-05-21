@@ -1,21 +1,6 @@
 Build.PL
 ChangeLog
 COPYING
-inc/Module/AutoInstall.pm
-inc/Module/Install.pm
-inc/Module/Install/AutoInstall.pm
-inc/Module/Install/Base.pm
-inc/Module/Install/Build.pm
-inc/Module/Install/Can.pm
-inc/Module/Install/Fetch.pm
-inc/Module/Install/Include.pm
-inc/Module/Install/Makefile.pm
-inc/Module/Install/Metadata.pm
-inc/Module/Install/Win32.pm
-inc/Module/Install/WriteAll.pm
-inc/Test/Builder.pm
-inc/Test/Builder/Module.pm
-inc/Test/More.pm
 INSTALL
 lib/WWW/YouTube.pm
 lib/WWW/YouTube/Com.pm
@@ -25,7 +10,6 @@ lib/WWW/YouTube/ML.pm
 lib/WWW/YouTube/ML/API.pm
 lib/WWW/YouTube/XML.pm
 lib/WWW/YouTube/XML/API.pm
-Makefile.PL
 MANIFEST			This list of files
 MANIFEST.SKIP
 META.yml
@@ -33,4 +17,5 @@ public_keys/ERMEYERS2005.pub
 README
 t/test0.pl.t
 t/use_me/test0.pl.t
+Makefile.PL
 SIGNATURE    Added here by Module::Build

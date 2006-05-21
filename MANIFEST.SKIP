@@ -10,7 +10,7 @@
 ^_bin/
 ^_dat/
 ^_out/
-[.].+[~]$
+[~]$
 [.]bak$
 [.]kdev.+$
 ^templates/

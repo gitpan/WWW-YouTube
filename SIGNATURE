@@ -14,30 +14,15 @@ not run its Makefile.PL or Build.PL.
 -----BEGIN PGP SIGNED MESSAGE-----
 Hash: SHA1
 
-SHA1 b79bbdc2607e13352bbe4d4fb1b93cd681661f39 Build.PL
+SHA1 d71d66191743ad9984e940dda2a6a3afe03e0820 Build.PL
 SHA1 0b184ad51ba2a79e85d2288d5fcf8a1ea0481ea4 COPYING
 SHA1 b78a79a4067e91d1a10385be6cf4b3c7cc620e0d ChangeLog
 SHA1 72371f3217c31e8c92331c90cc2153a04f3b07bf INSTALL
-SHA1 c5382598ae8bbd591eb0c0363525e70d8f319e95 MANIFEST
-SHA1 83e10695abc4f9ba4fd32a98fa0ce5dc4d40a820 MANIFEST.SKIP
-SHA1 64335fc9957fdb3c8b5054beab0c9c13611dc564 META.yml
-SHA1 2b3ae1c40b299f1b609e8ea26145f62b6b42e6f0 Makefile.PL
+SHA1 279b7c976e8888275476154e1e1a183514df1cef MANIFEST
+SHA1 cf244bc2b523d07a4f03cc0cebb7018084212533 MANIFEST.SKIP
+SHA1 6d7a49b92f0b09542ac918c98167b4f4dd27d0d4 META.yml
+SHA1 cd14ada78fb37a0d926edd86eddcdf7f939de582 Makefile.PL
 SHA1 67ad0b789f4fd60472a1f1abba36e7a741b29c73 README
-SHA1 0bb5ddbe64424d40536acdee2f09e853ab39087d inc/Module/AutoInstall.pm
-SHA1 e28cf2d3ba35f6ca3a448acc7bee191b7c390379 inc/Module/Install.pm
-SHA1 d7013668911c86af441cad115b897fc675a472de inc/Module/Install/AutoInstall.pm
-SHA1 e7c1c86f57b6778f4bdc7fd8c1b950e60ef41bc0 inc/Module/Install/Base.pm
-SHA1 cb9aba1d2d38aeced33c6d74e9175577f31af79c inc/Module/Install/Build.pm
-SHA1 e1829448769445cdaac384a888bf9ccf42e0d89a inc/Module/Install/Can.pm
-SHA1 70aa5e2055e8e38b4eecc5fc8c91762c0e97f551 inc/Module/Install/Fetch.pm
-SHA1 8d88f2cb120f2e64f374136df2e25d0bb6f0595b inc/Module/Install/Include.pm
-SHA1 8ac832baf4f9e8e72d3e8f103cee6e8a94ac80e1 inc/Module/Install/Makefile.pm
-SHA1 0807e79d6dbfda4fcd3db0fc7df2e33e0cba263b inc/Module/Install/Metadata.pm
-SHA1 4da0a1fce2339cc3f8c296c7716480d2564d9470 inc/Module/Install/Win32.pm
-SHA1 9a903a1d178954ad864c7dcc98f9fa5c005d1553 inc/Module/Install/WriteAll.pm
-SHA1 f0ebc594cf8ba858ee9a840c344d9b7ea2c3c6f4 inc/Test/Builder.pm
-SHA1 6bb30e9867f6dbcada80acca07cb727fa09fc3a0 inc/Test/Builder/Module.pm
-SHA1 07c750f370de7a44ee7b0ed9ec30a7e89c24c9b9 inc/Test/More.pm
 SHA1 c3ad7ef04749ebc8060c17b510311f142e2b0b26 lib/WWW/YouTube.pm
 SHA1 09331227ed7b89c0f22b4ea72a3e1e57f131b7ce lib/WWW/YouTube/Com.pm
 SHA1 9b25549cd796c915db01fe856ab5090c40984a8b lib/WWW/YouTube/HTML.pm
@@ -52,7 +37,7 @@ SHA1 16aefcee72dd01da9fd8743e71b6de7be6e6a4e9 t/use_me/test0.pl.t
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1.4.2.2 (GNU/Linux)
 
-iEYEARECAAYFAkRugcsACgkQmYhyuYPOgKNbNwCcCYYpPouHxM5tGnOsQpodsGHy
-i/MAn2I6SweierVK1qYZ04mkMP4++wun
-=fTgz
+iEYEARECAAYFAkRvzGYACgkQmYhyuYPOgKN5kACfazvOLOBcrZjTOlEbusOYhPRh
+eUUAoIBu8IDV+6aWKpRrByVI6WBnCQfd
+=WYhR
 -----END PGP SIGNATURE-----
