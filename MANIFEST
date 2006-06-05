@@ -18,4 +18,6 @@ README
 t/test0.pl.t
 t/use_me/test0.pl.t
 Makefile.PL
+youtube/tag/tag.php
+youtube/tag/tag.plx
 SIGNATURE    Added here by Module::Build

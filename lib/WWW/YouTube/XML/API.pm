@@ -44,7 +44,8 @@ require Data::Dumper; ## get rid of this
 
 require IO::File;
 
-require FindBin;
+##debug##require FindBin;
+##debug##require Cwd;
 
 require Date::Format;
 
@@ -708,7 +709,7 @@ $WWW::YouTube::XML::API::action{$api.'_cache_load'} = sub
 
       return( $result ) if ( ! -f $myxml );
 
-      ##$myxmldump->dtd; ## It's in document
+      $myxmldump->dtd(); ## It's in document
 
       $result->{'tree'} = $myxmldump->xml2pl( $myxml );
 
@@ -1662,6 +1663,9 @@ $WWW::YouTube::XML::API::action{$api.'_cache_save'} = sub
 
    if ( $WWW::YouTube::XML::API::action{$iam.'_call_check'}->( $request ) )
    {
+      ##debug##print $FindBin::Bin ."\n";
+      ##debug##print Cwd::cwd() ."\n";
+
       my $id_wrk_dir = '../video/' . $iam . '_cache';
 
       mkdir ( $id_wrk_dir ) if ( ! -d $id_wrk_dir );
@@ -1688,7 +1692,13 @@ $WWW::YouTube::XML::API::action{$api.'_cache_save'} = sub
 
          my $id_tag_dir = "$id_wrk_dir/$id_tag";
 
-         mkdir ( $id_tag_dir ) if ( ! -d $id_tag_dir );
+         if ( ! -d $id_tag_dir )
+         {
+            mkdir ( $id_tag_dir );
+
+            ##chmod( 0777, $myxml );
+
+         } ## end if
 
          symlink( "../$id_canon.xml.gz", "$id_tag_dir/$id_canon.xml.gz" ); ## just link tag to the video
 

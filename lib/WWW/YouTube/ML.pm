@@ -333,7 +333,6 @@ sub WWW::YouTube::ML::vlbt
 
    (
      $h->{'tag'},
-     $h->{'wrkdir'},
      $h->{'first_page'},
      $h->{'last_page'},
      $h->{'per_page'},
@@ -342,9 +341,6 @@ sub WWW::YouTube::ML::vlbt
    (
       ( defined( $WWW::YouTube::ML::string_tag ) )?
            $WWW::YouTube::ML::string_tag : $h->{'tag'},
-
-      ( defined( $h->{'wrkdir'} ) )?
-           $h->{'wrkdir'} : $FindBin::Bin.'/tag_'.$h->{'tag'},
 
       WWW::YouTube::ML::numeric_first_page( $h->{'first_page'} ),
 
@@ -361,6 +357,16 @@ sub WWW::YouTube::ML::vlbt
                                 },
 
    );
+
+   $h->{'tag_canon'} = $h->{'tag'};
+
+   $h->{'tag_canon'} =~ s/\s+/_nbsp_/g;
+
+   if ( ! defined( $h->{'wrkdir'} ) )
+   {
+      $h->{'wrkdir'} = $FindBin::Bin.'/tag_'.$h->{'tag_canon'};
+
+   } ## end if
 
    ##debug##WWW::YouTube::ML::show_all_opts();
 
@@ -385,7 +391,7 @@ sub WWW::YouTube::ML::vlbt
 
    if ( $WWW::YouTube::HTML::API::string_vlbt_want ne 'none' )
    {
-      mkdir $h->{'wrkdir'} if ( ! -e $h->{'wrkdir'} ); ## if needed
+      mkdir( $h->{'wrkdir'} ) if ( ! -e $h->{'wrkdir'} ); ## if needed
 
       $h->{'video_list'}->{'just'} = $WWW::YouTube::HTML::API::string_vlbt_want;
 

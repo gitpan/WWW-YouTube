@@ -7,15 +7,11 @@ use warnings;
 
 use Module::Build;
 
-require ExtUtils::MakeMaker;
-
 require Config;
 
 require File::Spec;
 
 require Date::Format;
-
-require FindBin;
 
 my $param =
 {
@@ -24,7 +20,7 @@ my $param =
    'AUTHOR' => 'Eric R. Meyers <ermeyers@adelphia.net>',
    'VERSION' => Date::Format::time2str( '%Y.%m%d', time() ),
    'LICENSE' => 'perl',
-   'ABSTRACT' => 'Interface to bundle modules',
+   'ABSTRACT' => 'Interface to www.youtube.com',
 
 };
 
@@ -75,76 +71,83 @@ my $build = Module::Build->new
          'Test::Warn' => 0,
 
       },
+##      'no_index' =>
+##      {
+##         'directory' => 'youtube',
+##
+##      },
+      'add_to_cleanup' =>
+      [
+         "$param->{'NAME'}-$param->{'VERSION'}.tar.gz",
+
+      ],
    );
-
-unlink( "MANIFEST.bak" );
-
-unlink( "$param->{'NAME'}-$param->{'VERSION'}.tar.gz" );
 
 $build->create_build_script();
 
-if ( -d "$FindBin::Bin/_bin" ) ## won't exist in distribution
+if ( -d './_bin' ) ## won't exist in distribution
 {
-   system( "$FindBin::Bin/_bin/create_www_youtube.plx $param->{'VERSION'}" );
+   system( "./_bin/create_www_youtube.plx $param->{'VERSION'}" );
 
    $build->dispatch( 'build' );
    $build->dispatch( 'test', 'verbose' => 1 );
    $build->dispatch( 'install' );
 
+   ##debug##
+   gpg_me();
+
 }
 else
 {
-   locate_gpg();
+   print "##\n## Thanks to Audrey Tang, for being the first person to send me an encryption.\n##\n";
+
+   gpg_me();
 
    print "Now, please enter 'Build' to make all, 'Build test' to test, and 'Build install' to install.\n";
 
 } ## end if
 
 ##
-## can_run
+## can_find
 ##
-sub can_run
+sub can_find
 {
    my $cmd = shift;
 
-   my $_cmd = $cmd;
-
-   return $cmd if ( -x $cmd or $cmd = MM->maybe_command( $cmd ) );
+   my $abs = undef;
 
    foreach my $dir ( split( /$Config::Config{'path_sep'}/, $ENV{PATH} ), '.' )
    {
-      my $abs = File::Spec->catfile( $dir, $_cmd );
+      $abs = File::Spec->catfile( $dir, $cmd );
 
-      return ( $abs ) if ( -x $abs or $abs = MM->maybe_command( $abs ) );
+      return ( $abs ) if ( -x $abs );
 
    } ## end foreach
 
-} ## end sub can_run
+   return;
+
+} ## end sub can_find
 
 ##
-## locate_gpg
+## gpg_me
 ##
-sub locate_gpg
+sub gpg_me
 {
-   print "##\n## Thanks to Audrey Tang, for being the first person to send me an encrypted email.\n##\n";
-
    print "*** Looking for GnuPG (GNU Privacy Guard, a cryptographic signature tool)...\n";
 
-   my $gpg = can_run( 'gpg' );
+   my $gpg = can_find( 'gpg' );
 
-   my $has_gpg = ( $gpg and `gpg --version` =~ /GnuPG/ and defined `gpg --list-public-keys` );
-
-   if ( $has_gpg )
+   if ( defined( $gpg ) && ( `gpg --version` =~ /GnuPG/ ) && defined( `gpg --list-public-keys` ) )
    {
       print "GnuPG found ($gpg).\n";
 
       return ( 1 ) if grep { /^--installdeps/ } @ARGV;
 
-      if ( ExtUtils::MakeMaker::prompt( "Import CPAN Author $param->{'CPANID'}'s public key into GnuPG?", 'n' ) =~ /^y/i )
+      if ( $build->prompt( "Import CPAN Author $param->{'CPANID'}'s public key into GnuPG?", 'n' ) =~ /^y/i )
       {
          print 'Importing public key into GnuPG keyring... ';
 
-         system 'gpg', '--quiet', '--import', glob('public_keys/'.$param->{'CPANID'}.'*.pub');
+         system( 'gpg --quiet --import', glob('public_keys/'.$param->{'CPANID'}.'*.pub') );
 
          print "done.\n";
 
@@ -154,9 +157,8 @@ sub locate_gpg
 
    } ## end if
 
-   print 'GnugPG not found anywhere in your PATH, "eek," said Mr. Audrey Tang.'."\n";
+   print 'GnuPG not found anywhere in your PATH, "eek," said Audrey Tang.'."\n";
 
-   return;
+   return ( 0 );
 
-} ## end sub locate_gpg
-
+} ## end sub gpg_me

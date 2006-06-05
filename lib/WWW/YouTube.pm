@@ -137,19 +137,33 @@ sub WWW::YouTube::vlbt
 {
    my $h = shift; ## not used yet
 
-   my $iam = basename( $0 );
+   my $iam = File::Basename::basename( $0 );
 
    die ( "\$0=$0\n" ) if ( ! defined( $iam ) || ( $iam eq '' ) );
 
-   $iam =~ m/^([^_]+_([^.]+))[.]plx$/ || die "no basename match to start (iknow_iam.plx)\n";
+   my $ml_tag = undef;
 
-   my ( $dflt_ml_tag, $dflt_ml_tag_subdir ) = ( $2, $1 ); ##debug##print $tag . "\n";exit;
+   my $ml_tag_subdir = undef;
 
-   my $ml_tag = ( defined ( $WWW::YouTube::ML::string_tag ) )? $WWW::YouTube::ML::string_tag :
-                                                          $dflt_ml_tag;
+   my $dflt_ml_tag_subdir = undef;
 
-   my $ml_tag_subdir = ( defined ( $WWW::YouTube::ML::string_tag_subdir ) )? $WWW::YouTube::ML::string_tag_subdir :
-                                                                        $dflt_ml_tag_subdir;
+   if ( defined( $WWW::YouTube::ML::string_tag ) )
+   {
+      $ml_tag = $WWW::YouTube::ML::string_tag;
+   }
+   else
+   {
+      $iam =~ m/^([^_]+_([^.]+))[.]plx$/ || die "no basename match to start (iknow_iam.plx)\n";
+
+      ( $ml_tag, $ml_tag_subdir ) = ( $2, $1 ); ##debug##print $tag . "\n";exit;
+
+   } ## end if
+
+   if ( defined ( $WWW::YouTube::ML::string_tag_subdir ) )
+   {
+      $ml_tag_subdir = $WWW::YouTube::ML::string_tag_subdir
+
+   } ## end if
 
    WWW::YouTube::ML::vlbt( { 'tag' => $ml_tag, 'tag_subdir' => $ml_tag_subdir } );
 

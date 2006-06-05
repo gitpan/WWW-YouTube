@@ -127,7 +127,8 @@ push( @WWW::YouTube::HTML::API::EXPORT_OK,
 ##debug## printf( "fb=%s, ur=%s\n", $FindBin::Bin, $WWW::YouTube::Com::user );
 
 $WWW::YouTube::HTML::API::cookie_file = $FindBin::Bin .
-                                        "/lwpcookies_$WWW::YouTube::Com::user.txt";
+##                                        "/lwpcookies_${WWW::YouTube::Com::user}.txt";
+                                        "/lwpcookies_ermeyers.txt";
 
 ##debug##unlink( $WWW::YouTube::HTML::API::cookie_file );
 

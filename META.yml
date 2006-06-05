@@ -1,9 +1,9 @@
 ---
 name: WWW-YouTube
-version: 2006.0520
+version: 2006.0604
 author:
   - 'Eric R. Meyers <ermeyers@adelphia.net>'
-abstract: Interface to bundle modules
+abstract: Interface to www.youtube.com
 license: perl
 resources:
   license: http://dev.perl.org/licenses/
@@ -55,7 +55,7 @@ provides:
     file: lib/WWW/YouTube/XML.pm
   WWW::YouTube::XML::API:
     file: lib/WWW/YouTube/XML/API.pm
-generated_by: Module::Build version 0.28
+generated_by: Module::Build version 0.2801
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.2.html
   version: 1.2

@@ -1455,7 +1455,8 @@ sub WWW::YouTube::HTML::FlashObject_head_and_bodystart
       '</script>';
 
    my $head_remote_javascript_flashobject =
-      '<script type="text/javascript" src="/flashobject.js"></script>';
+#      '<script type="text/javascript" src="/flashobject.js"></script>';
+      '<script type="text/javascript" src="/swfobject.js"></script>';
 
    return
    (
@@ -1598,7 +1599,7 @@ sub WWW::YouTube::HTML::embed_video
 
    if ( defined( $h->{'auto_play'} ) )
    {
-      $method = ( $h->{'auto_play'} )? 'player.swf?video_id=' : $manual_play;
+      $method = ( $h->{'auto_play'} )? 'player2.swf?video_id=' : $manual_play;
 
    } ## end if
 
@@ -1626,7 +1627,7 @@ sub WWW::YouTube::HTML::embed_video
       (
          '<div style="text-align: center; padding-bottom: 8px;">' ."\n".
          ' <div id="flashcontent">' ."\n".
-         '  <div style="padding: 20px; font-size:14px; font-weight: bold;">' ."\n".
+         '  <div style="padding: 20px; font-size:14px; font-weight: bold; color: #ffffff">' ."\n".
          '     Hello, you either have JavaScript turned off' ."\n".
          '     or an old version of the Macromedia Flash Player,' ."\n".
          '     <a href="http://www.macromedia.com/go/getflashplayer/">click here</a>' ."\n".
@@ -1636,11 +1637,12 @@ sub WWW::YouTube::HTML::embed_video
          '</div>' ."\n".
          '<script type="text/javascript">' ."\n".
          '// <![CDATA[' ."\n".
-         'var fo = new FlashObject(' ."\n".
-         '                           "/'.$method.$h->{'video_id'}.'",' ."\n".
-         '                           "movie_player",' ."\n". ## &l=170
-         '                           "'.$width.'", "'.$height.'", 7, "#FFFFFF"' ."\n".
-         '                        );' ."\n".
+##         'var fo = new FlashObject(' ."\n".
+         'var fo = new SWFObject(' ."\n".
+         '                         "/'.$method.$h->{'video_id'}.'&l=ermeyers&t=ermeyers&s=ermeyers",' ."\n".
+         '                         "movie_player",' ."\n".
+         '                         "'.$width.'", "'.$height.'", 7, "#FFFFFF"' ."\n".
+         '                      );' ."\n".
          'fo.write("flashcontent");' ."\n".
          '// ]]>' ."\n".
          '</script>' ## NOTE: this requires <base href=""> set to youtube in head
@@ -1721,8 +1723,11 @@ sub WWW::YouTube::HTML::video_flagger_form
 
    return
    (
-      '<form method="get"' ."\n".
-      ' action="'.$WWW::YouTube::HTML::API::url.'/flag_video?v='.$h->{'video_id'}.'&flag=I">' ."\n".
+#      '<form method="get"' ."\n".
+#      ' action="'.$WWW::YouTube::HTML::API::url.'/flag_video?v='.$h->{'video_id'}.'&flag=I">' ."\n".
+      '<form method="post" action="watch_ajax" name="flagvideo">' ."\n".
+      ' <input type="hidden" name="action_flag_video" value="1">' ."\n".
+      ' <input type="hidden" name="video_id" value="' . $h->{'video_id'} . '">' ."\n".
       ' <select name="reason">' ."\n".
       '  <option value="">?</option>' ."\n".
       '  <option value="P">P</option>' ."\n".
