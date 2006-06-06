@@ -1,2 +1,273 @@
-pre-alpha
-TBD
+NAME
+    WWW::YouTube - YouTube Developer Interface
+
+SYNOPSIS
+    use lib ( $ENV{'HOME'} );
+
+    use WWW::YouTube::Com; ## SEE DESCRIPTION
+
+     Options;
+
+       TBD
+
+OPTIONS
+    TBD
+
+DESCRIPTION
+    WWW::YouTube is the *Public* YouTube Development Interface.
+
+    WWW::YouTube::Com is your *Private* YouTube Development Interface.
+
+    We need your private user, pass and dev_id defined here.
+
+    To use this YouTube Developer Interface, you need to have a YouTube
+    username and password, and you'll need to register with YouTube as a
+    Developer in order to get a Developer ID for the YouTube XMLRPC API.
+
+    By the way, you need to go to YouTube at http://www.youtube.com to do
+    your registering, and you must think up a really good excuse for wanting
+    to become a registered YouTube Developer. Something like helping me to
+    develop programs to protect registered teenagers and the General Public,
+    including children, from being exposed to too much adult content and
+    other inappropriate material might work.
+
+    http://www.youtube.com/profile?user=ermeyers
+
+    Just because a YouTube video has been flagged as inappropriate material
+    for the General Public, doesn't mean that you, as a registered adult,
+    can't watch it. Flagging keeps YouTube registered teenagers, and
+    YouTube's unregistered viewing General Public, including children, from
+    being able to view the contents of a video identified as an
+    inappropriate video.
+
+    You'll need to educate yourself a little bit, and experiment with
+    YouTube directly, before going Hog Wild with my YouTube applications,
+    like I do, flagging video after video. That's my purpose for this
+    development project.
+
+    http://www.youtube.com http://www.youtube.com/dev
+
+    -- So, now about your future YouTube development projects:
+
+    $ mkdir ~/WWW
+
+    $ mkdir ~/WWW/YouTube
+
+    /usr/bin/php $PERLLIB/WWW/YouTube/Com.pm user pass dev_id >
+    ~/WWW/YouTube/Com.pm
+
+    -- NOTE: php ...
+
+    -- Users/Videos data: XML-RPC Interface demo for this initial testing,
+    training and development environment setup purpose.
+
+    $ mkdir ~/youtube
+
+    $ mkdir ~/youtube/video ## video application and data directory (We're
+    not storing videos here)
+
+    $ GET
+
+    http://search.cpan.org/src/ERMEYERS/WWW-YouTube-2006.0606/youtube/video/
+    video.plx
+
+    > ~/youtube/video/video.plx
+
+    $ chmod +x ~/youtube/video/video.plx
+
+    -- It's time for you to see this YouTube Developer API's page:
+    http://www.youtube.com/dev
+
+    $ ~/youtube/video/video.plx
+
+    WWW::YouTube::XML::API::action{ugp_cache}:
+
+    Calling $WWW::YouTube::XML::API::action{ugp_call}
+
+    WWW::YouTube::XML::API::action{ulfv_cache}:
+
+    Calling $WWW::YouTube::XML::API::action{ulfv_call}
+
+    WWW::YouTube::XML::API::action{ulf_cache}:
+
+    Calling $WWW::YouTube::XML::API::action{ulf_call}
+
+    WWW::YouTube::XML::API::action{vlf_call}:
+
+    WWW::YouTube::XML::API::action{vgd_cache}:
+
+    Calling $WWW::YouTube::XML::API::action{vlf_call}
+
+    Calling $WWW::YouTube::XML::API::action{vgd_call}
+
+    WWW::YouTube::XML::API::action{vlbt_cache}:
+
+    Calling $WWW::YouTube::XML::API::action{vlbt_call}
+
+    WWW::YouTube::XML::API::action{vlbu_cache}:
+
+    Calling $WWW::YouTube::XML::API::action{vlbu_call}
+
+    WWW::YouTube::XML::API::action{vlf_cache}:
+
+    Calling $WWW::YouTube::XML::API::action{vlf_call}
+
+    -- What else just happened?
+
+    $ ls -1 ~/youtube/video
+
+    lwpcookies_username.txt ## your YouTube username cookies
+
+    ugp_cache ## ugp = youtube.users.get_profile
+
+    ulf_cache ## ulf = youtube.users.list_friends
+
+    ulfv_cache ## ulfv = youtube.users.list_favorite_videos
+
+    vgd_cache ## vgd = youtube.videos.get_details
+
+    video.plx
+
+    vlbt_cache ## vlbt = youtube.videos.list_by_tag
+
+    vlbu_cache ## vlbu = youtube.videos.list_by_user
+
+    vlf_cache ## vlf = youtube.videos.list_featured
+
+    -- Look at my YouTube profile returned from the ugp_call and stored in
+    the ugp_cache
+
+    $ zcat ~/youtube/video/ugp_cache/ermeyers.xml.gz | more
+
+    $ man XML::Dumper
+
+    -- OK?
+
+    -- And, so now, your ready for my 'tag' application: ( vlbt =
+    youtube.videos.list_by_tag )
+
+    -- Let's setup to play videos by 'tag'
+
+    -- As your username:
+
+    $ mkdir ~/youtube/tag ## tag application directory
+
+    -- There will come a very helpful user named apache to play videos by
+    'tag' with you!
+
+    -- NOTE: SELinux causes problems running perl under Apache [ email me,
+    if need be ]
+
+    $ chmod -R a+w ~/youtube/video
+
+    $ chmod a+w ~/youtube/tag
+
+    -- As your root:
+
+    # ln -s ~username/youtube /var/www/youtube
+
+    # ln -s ~username/WWW /var/www/WWW
+
+    # ln -s ~username/youtube /var/www/html/youtube
+
+    -- As your username:
+
+    $ GET
+
+    http://search.cpan.org/src/ERMEYERS/WWW-YouTube-2006.0606/youtube/tag/im
+    ages/ERMpowered.gif
+
+    > ~/youtube/tag/images/ERMpowered.gif
+
+    $ chmod a+r ~/youtube/tag/images/ERMpowered.gif
+
+    $ GET
+
+    http://search.cpan.org/src/ERMEYERS/WWW-YouTube-2006.0606/youtube/tag/ta
+    g.php
+
+    > ~/youtube/tag/tag.php
+
+    $ chmod a+x ~/youtube/tag/tag.php
+
+    $ GET
+
+    http://search.cpan.org/src/ERMEYERS/WWW-YouTube-2006.0606/youtube/tag/ta
+    g.plx
+
+    > ~/youtube/tag/tag.plx
+
+    $ chmod a+x ~/youtube/tag/tag.plx
+
+    $ GET http://localhost/youtube/tag/tag.php ## DOES IT WORK FOR YOU NOW?
+
+    -- Security Level Config: /usr/bin/system-config-securitylevel.
+
+    -- Try checking "Disable SELinux protection for httpd daemon," so that
+    you can run perl scripts under Apache.
+
+    -- Currently I have FC4 Linux, Apache 2.0, and I couldn't do Perl CGI.pm
+    or load mod_perl at all. :(
+
+    -- NOTE: ~/youtube/tag/tag.plx works from the command line too, but it's
+    not as much fun that way.
+
+    $ ~/youtube/tag/tag.plx '--ml_tag=very nice girl' --html_disarm
+    --html_thumbnail --ml_max_pages=1
+
+    $ ls ~/youtube/tag/tag_very_nbsp_nice_nbsp_girl
+
+    $ ~/youtube/tag/tag.plx '--ml_tag=very hot girl' --html_columns=3
+    --ml_per_page=6 --ml_max_pages=5
+
+    $ ls ~/youtube/tag/tag_very_nbsp_hot_nbsp_girl
+
+    Matthew 3:12, "His winnowing fork is in his hand, and he will clear his
+    threshing floor, gathering his wheat into the barn and burning up the
+    chaff with unquenchable fire." -- NIV
+
+    --I've got *children*, and I developed this program to flag videos as
+    *inappropriate* material. I run by tag to flag junk videos.
+
+      * P : Pornography or Obscenity
+      * I : Illegal Acts
+      * G : Graphic Violence
+      * R : Racially or Ethnically Offensive Content
+
+      * S : Submit to YouTube
+
+    I'd like your help with this protective flagging effort, on occasion.
+    Thanks.
+
+    With regard to the colored Video "Tag" and Video "Author" labels
+    displayed, corresponding to the Video's tags or the Author's username at
+    YouTube:
+
+      * Green  : Found, and your tag string matched Exactly.
+      * Yellow : Found, but your tag string matched in a Partial or a Fuzzy way.
+      * Red    : no match found.
+
+    I have tag display options for this:
+
+      --ml_want=[all|found|not_found] ## What's saved and displayed
+
+      --xml_want=[all|found|not_found] ## What's saved
+
+      --html_want=[all|found|not_found] ## What's displayed
+
+SEE ALSO
+    What else is there to see, after seeing some '--ml_tag=very hot girl' on
+    YouTube? You asked...
+
+    *WWW::YouTube::Com* *WWW::YouTube::ML* *WWW::YouTube::XML*
+    *WWW::YouTube::HTML*
+
+AUTHOR
+    Eric R. Meyers <ermeyers@adelphia.net>
+
+LICENSE
+    perl
+
+COPYRIGHT
+    Copyright (C) 2006 Eric R. Meyers <ermeyers@adelphia.net>
+

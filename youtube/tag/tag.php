@@ -520,7 +520,11 @@ if ( $interface_action == $actionlist['vlbt'] )
    $sstr_canon = preg_replace( '/\s+/', '_nbsp_', $sstr_value );
 
    print '<a target="' . $sstr_canon . '"' .
-         ' href="/youtube/tag/tag_' . $sstr_canon . '/' . $vlbt_type . '0001.html">' . $sstr_value .
+         ' href="' . sprintf( "/youtube/tag/tag_%s/%s%04d.html",
+                              $sstr_canon,
+                              $vlbt_type,
+                              $vlbt_1st
+                            ) . '">' . $sstr_value .
          '</a>' ."\n";
 
 }
@@ -536,7 +540,7 @@ if ( isset( $_GET{'canon'} ) )
 
 } ## end if
 
-list_tag_results( '/var/www/html/youtube/tag', 0 );
+list_tag_results( '/var/www/html/youtube/tag', 0, $sstr_value );
 
 print '</td>'. "\n";
 
@@ -629,7 +633,7 @@ print '</table>'. "\n";
 
 print '</form>' ."\n";
 
-function list_tag_results( $dir, $rmdir_flag )
+function list_tag_results( $dir, $rmdir_flag, $sstr_excluded )
 {
    $IAM = $_SERVER['SCRIPT_NAME'];
 
@@ -645,7 +649,13 @@ function list_tag_results( $dir, $rmdir_flag )
 
       if ( ! $rmdir_flag )
       {
-         print '<a target="' . $item_canon . '" href="/youtube/tag/' . $tag_item . '/">' . $item . '</a>' ."\n";
+         if ( $item != $sstr_excluded )
+         {
+            print '<a target="' . $item_canon . '"'.
+                    ' href="/youtube/tag/' . $tag_item . '/">' . $item .
+                  '</a>' ."\n";
+
+         } ## end if
 
       }
       else

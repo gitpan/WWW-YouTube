@@ -24,14 +24,22 @@ my $param =
 
 };
 
+if ( -d './_bin' ) ## won't exist in distribution
+{
+   system( "./_bin/create_www_youtube.plx $param->{'VERSION'}" );
+
+} ## end if
+
 my $build = Module::Build->new
    (
       'dist_name' => $param->{'NAME'},
       'dist_author' => $param->{'AUTHOR'},
       'dist_version' => Date::Format::time2str( '%Y.%m%d', time() ),
+      'dist_version_from' => 'lib/WWW/YouTube.pm',
       'license' => $param->{'LICENSE'},
       'dist_abstract' => $param->{'ABSTRACT'},
       'create_makefile_pl' => 'passthrough',
+      'create_readme' => 1,
       'sign' => 1,
       'recursive_test_files' => 1,
       'build_requires' =>
@@ -71,11 +79,6 @@ my $build = Module::Build->new
          'Test::Warn' => 0,
 
       },
-##      'no_index' =>
-##      {
-##         'directory' => 'youtube',
-##
-##      },
       'add_to_cleanup' =>
       [
          "$param->{'NAME'}-$param->{'VERSION'}.tar.gz",
@@ -87,8 +90,6 @@ $build->create_build_script();
 
 if ( -d './_bin' ) ## won't exist in distribution
 {
-   system( "./_bin/create_www_youtube.plx $param->{'VERSION'}" );
-
    $build->dispatch( 'build' );
    $build->dispatch( 'test', 'verbose' => 1 );
    $build->dispatch( 'install' );

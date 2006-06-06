@@ -1,4 +1,3 @@
-##
 ## WWW::YouTube::ML
 ##
 package WWW::YouTube::ML;
@@ -11,7 +10,7 @@ use warnings;
 #my $VERSION="0.1";
 
 #For CVS , use following line
-my $VERSION=sprintf("%d.%02d", q$Revision: 1.1 $ =~ /(\d+)\.(\d+)/);
+our $VERSION=sprintf("%d.%04d", q$Revision: 2006.0606 $ =~ /(\d+)\.(\d+)/);
 
 BEGIN {
 
@@ -475,37 +474,25 @@ __END__ ## package WWW::YouTube::ML
 
 =head1 NAME
 
-WWW::YouTube::ML or WWW/YouTube/ML.pm - short description of your program
+WWW::YouTube::ML - WWW::YouTube Markup Language, an Abstraction
 
 =head1 SYNOPSIS
 
- how to use your program
- program [options]
-
  Options;
-# --help brief help message
-# --man full documentation
+
+   TBD
+
 =head1 OPTIONS
 
-#=over 8
-#
-#=item B<--help>
-#
-#Print a brief help message and exits.
-#
-#=item B<--man>
-#
-#Prints the manual page and exits.
-#
-#=back
+TBD
 
 =head1 DESCRIPTION
 
- long description of your program
+ML just stands for Markup Language, in a Abstract way, for HTML, XML, SGML or YAML or whatever gets included as ML capabilities. 
 
 =head1 SEE ALSO
 
- need to know things before somebody uses your program
+I<L<WWW::YouTube>> I<L<WWW::YouTube::ML::API>> I<L<WWW::YouTube::HTML>> I<L<WWW::YouTube::XML>>
 
 =head1 AUTHOR
 

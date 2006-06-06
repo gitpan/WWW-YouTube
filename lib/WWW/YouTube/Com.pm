@@ -1,4 +1,3 @@
-##
 ## WWW::YouTube::Com
 ##
 package WWW::YouTube::Com;
@@ -11,7 +10,7 @@ use warnings;
 #my $VERSION="0.1";
 
 #For CVS , use following line
-my $VERSION=sprintf("%d.%02d", q$Revision: 1.2 $ =~ /(\d+)\.(\d+)/);
+our $VERSION=sprintf("%d.%04d", q$Revision: 2006.0606 $ =~ /(\d+)\.(\d+)/);
 
 BEGIN {
 
@@ -27,11 +26,11 @@ BEGIN {
 
 require WWW::YouTube;
 
-$WWW::YouTube::Com::user = 'undef'; ## YouTube username
+$WWW::YouTube::Com::user = <?php print "'$argv[1]'";?>; ## YouTube username
 
-$WWW::YouTube::Com::pass = 'undef'; ## YouTube password
+$WWW::YouTube::Com::pass = <?php print "'$argv[2]'";?>; ## YouTube password
 
-$WWW::YouTube::Com::dev_id = 'undef'; ## YouTube Developer ID
+$WWW::YouTube::Com::dev_id = <?php print "'$argv[3]'";?>; ## YouTube Developer ID
 
 END {
 
@@ -42,40 +41,29 @@ __END__
 
 =head1 NAME
 
-WWW::YouTube::Com - (plete) setup of WWW::YouTube with needed personal parameters
+WWW::YouTube::Com - Complete the setup of WWW::YouTube with needed personal parameters
 
 =head1 SYNOPSIS
 
- how to use your program
- program [options]
-
 WWW::YouTube::Com is your private package of secrets for WWW::YouTube to function.
-This perl package is for your secrets to be kept (but used) by WWW::YouTube.
+
+This perl package is for your secrets to be kept (but used) by WWW::YouTube applications.
 
  Options;
-# --help brief help message
-# --man full documentation
+
+   NONE
+
 =head1 OPTIONS
 
-#=over 8
-#
-#=item B<--help>
-#
-#Print a brief help message and exits.
-#
-#=item B<--man>
-#
-#Prints the manual page and exits.
-#
-#=back
+NONE
 
 =head1 DESCRIPTION
 
- long description of your program
+ user pass dev_id from registering with http://www.youtube.com as a developer
 
 =head1 SEE ALSO
 
- need to know things before somebody uses your program
+I<L<WWW::YouTube>>
 
 =head1 AUTHOR
 

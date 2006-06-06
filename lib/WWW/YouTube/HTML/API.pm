@@ -1,4 +1,3 @@
-##
 ## WWW::YouTube::HTML::API
 ##
 package WWW::YouTube::HTML::API;
@@ -11,7 +10,7 @@ use warnings;
 #my $VERSION="0.1";
 
 #For CVS , use following line
-my $VERSION=sprintf("%d.%02d", q$Revision: 1.3 $ =~ /(\d+)\.(\d+)/);
+our $VERSION=sprintf("%d.%04d", q$Revision: 2006.0606 $ =~ /(\d+)\.(\d+)/);
 
 BEGIN {
 
@@ -651,37 +650,25 @@ __END__ ## package WWW::YouTube::HTML::API
 
 =head1 NAME
 
-WWW::YouTube::HTML::API or WWW/YouTube/HTML/API.pm - short description of your program
+WWW::YouTube::HTML::API - How to Interface with YouTube using HTTP Protocol, CGI, returning HTML.
 
 =head1 SYNOPSIS
 
- how to use your program
- program [options]
-
  Options;
-# --help brief help message
-# --man full documentation
+
+   TBD
+
 =head1 OPTIONS
 
-#=over 8
-#
-#=item B<--help>
-#
-#Print a brief help message and exits.
-#
-#=item B<--man>
-#
-#Prints the manual page and exits.
-#
-#=back
+TBD
 
 =head1 DESCRIPTION
 
- long description of your program
+HTML::API stands for HTML Application Programming Interface
 
 =head1 SEE ALSO
 
- need to know things before somebody uses your program
+I<L<WWW::YouTube>> I<L<WWW::YouTube::ML::API>> I<L<WWW::YouTube::HTML>> I<L<WWW::YouTube::XML::API>>
 
 =head1 AUTHOR
 

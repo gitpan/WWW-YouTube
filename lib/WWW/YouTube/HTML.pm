@@ -1,4 +1,3 @@
-##
 ## package WWW::YouTube::HTML
 ##
 package WWW::YouTube::HTML;
@@ -11,7 +10,7 @@ use warnings;
 #my $VERSION="0.1";
 
 #For CVS , use following line
-my $VERSION=sprintf("%d.%02d", q$Revision: 1.2 $ =~ /(\d+)\.(\d+)/);
+our $VERSION=sprintf("%d.%04d", q$Revision: 2006.0606 $ =~ /(\d+)\.(\d+)/);
 
 BEGIN {
 
@@ -1754,37 +1753,25 @@ __END__ ## package WWW::YouTube::HTML
 
 =head1 NAME
 
-WWW::YouTube::HTML or WWW/YouTube/HTML.pm - short description of your program
+WWW::YouTube::HTML - General Hyper-Text Markup Language capabilities go in here.
 
 =head1 SYNOPSIS
 
- how to use your program
- program [options]
-
  Options;
-# --help brief help message
-# --man full documentation
+
+   TBD
+
 =head1 OPTIONS
 
-#=over 8
-#
-#=item B<--help>
-#
-#Print a brief help message and exits.
-#
-#=item B<--man>
-#
-#Prints the manual page and exits.
-#
-#=back
+TBD
 
 =head1 DESCRIPTION
 
- long description of your program
+   WWW::YouTube HTML Layer.
 
 =head1 SEE ALSO
 
- need to know things before somebody uses your program
+I<L<WWW::YouTube>> I<L<WWW::YouTube::ML>> I<L<WWW::YouTube::HTML::API>> I<L<WWW::YouTube::XML>>
 
 =head1 AUTHOR
 

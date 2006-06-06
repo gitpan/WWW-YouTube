@@ -1,4 +1,3 @@
-##
 ## WWW::YouTube::ML::API
 ##
 package WWW::YouTube::ML::API; ## All Markup Language API
@@ -11,7 +10,7 @@ use warnings;
 ##my $VERSION="0.1";
 
 #For CVS , use following line
-our $VERSION=sprintf("%d.%02d", q$Revision: 1.1 $ =~ /(\d+)\.(\d+)/);
+our $VERSION=sprintf("%d.%04d", q$Revision: 2006.0606 $ =~ /(\d+)\.(\d+)/);
 
 BEGIN {
 
@@ -87,7 +86,7 @@ die( __PACKAGE__ ) if (
 ##debug####don't##WWW::YouTube::ML::API::create_opts_types( \%WWW::YouTube::ML::API::opts_type_args );
 
 $WWW::YouTube::ML::API::numeric_max_try = 5;
-$WWW::YouTube::ML::API::string_dbm_dir = "$ENV{'HOME'}/_dbm";
+$WWW::YouTube::ML::API::string_dbm_dir = "$ENV{'HOME'}/youtube/video/dbm/ml";
 $WWW::YouTube::ML::API::string_vlbt_want = 'all';
 
 ##debug####don't##WWW::YouTube::ML::register_all_opts( \%WWW::YouTube::ML::API::opts_type_args );
@@ -347,37 +346,25 @@ __END__ ## package WWW::YouTube::ML::API
 
 =head1 NAME
 
-WWW::YouTube::ML::API or WWW/YouTube/ML/API.pm - short description of your program
+WWW::YouTube::ML::API - How to Interface with YouTube in general.
 
 =head1 SYNOPSIS
 
- how to use your program
- program [options]
-
  Options;
-# --help brief help message
-# --man full documentation
+
+   TBD
+
 =head1 OPTIONS
 
-#=over 8
-#
-#=item B<--help>
-#
-#Print a brief help message and exits.
-#
-#=item B<--man>
-#
-#Prints the manual page and exits.
-#
-#=back
+TBD
 
 =head1 DESCRIPTION
 
- long description of your program
+ML::API stands for Generic Markup Language -- Application Programming Interface
 
 =head1 SEE ALSO
 
- need to know things before somebody uses your program
+I<L<WWW::YouTube>> I<L<WWW::YouTube::ML>> I<L<WWW::YouTube::HTML::API>> I<L<WWW::YouTube::XML::API>>
 
 =head1 AUTHOR
 
