@@ -10,7 +10,7 @@ use warnings;
 #my $VERSION="0.1";
 
 #For CVS , use following line
-our $VERSION=sprintf("%d.%04d", q$Revision: 2006.0606 $ =~ /(\d+)\.(\d+)/);
+our $VERSION=sprintf("%d.%04d", q$Revision: 2006.0609 $ =~ /(\d+)\.(\d+)/);
 
 BEGIN {
 
@@ -203,17 +203,17 @@ sub WWW::YouTube::XML::vgd  ## NOTE: changing this to collect data for xml dump
 
                $h->{$ihave}->{$iam}->{'author'}{
                   $h->{$ihave}->{$iam}->{$video_id}->{'author'}
-                                                        }->{'videos'}{$video_id} = 1;
-=cut
-               ##debug##
-               printf( "XML::${iam}_author=%s\tvideos=%d\n",
-                       $h->{$ihave}->{$iam}->{$video_id}->{'author'},
-                       0 + keys %{$h->{$ihave}->{$iam}->{'author'}{
-                                     $h->{$ihave}->{$iam}->{$video_id}->{'author'}
-                                                                  }->{'videos'}
-                                 }
-                     );
-=cut
+                                               }->{'videos'}{$video_id} = 1;
+#=cut
+#               ##debug##
+#               printf( "XML::${iam}_author=%s\tvideos=%d\n",
+#                       $h->{$ihave}->{$iam}->{$video_id}->{'author'},
+#                       0 + keys %{$h->{$ihave}->{$iam}->{'author'}{
+#                                     $h->{$ihave}->{$iam}->{$video_id}->{'author'}
+#                                                                  }->{'videos'}
+#                                 }
+#                     );
+#=cut
             }
             else
             {
@@ -339,7 +339,7 @@ sub WWW::YouTube::XML::vlbt  ## NOTE: changing this to collect data for xml dump
       {
          $h->{$ihave}->{$iam}->{$video_id}->{'author'} =~ s/[\s]+/ /g;
 
-         ##debug##printf( "XML::${iam}_author=%s\n", $h->{$ihave}->{$iam}->{$video_id}->{'author'} );
+         ##debug## printf( "XML::${iam}_author=%s\n", $h->{$ihave}->{$iam}->{$video_id}->{'author'} );
 
          if ( $h->{$ihave}->{$iam}->{$video_id}->{'author'} =~ m/$h->{$ihave}->{'tag'}/i )
          {
@@ -348,16 +348,16 @@ sub WWW::YouTube::XML::vlbt  ## NOTE: changing this to collect data for xml dump
             $h->{$ihave}->{$iam}->{'author'}{
                $h->{$ihave}->{$iam}->{$video_id}->{'author'}
                                                     }->{'videos'}{$video_id} = 1;
-=cut
-            ##debug##
-            printf( "XML::${iam}_author=%s\tvideos=%d\n",
-                    $h->{$ihave}->{$iam}->{$video_id}->{'author'},
-                    0 + keys %{$h->{$ihave}->{$iam}->{'author'}{
-                                  $h->{$ihave}->{$iam}->{$video_id}->{'author'}
-                                                               }->{'videos'}
-                              }
-                  );
-=cut
+#=cut
+#            ##debug##
+#            printf( "XML::${iam}_author=%s\tvideos=%d\n",
+#                    $h->{$ihave}->{$iam}->{$video_id}->{'author'},
+#                    0 + keys %{$h->{$ihave}->{$iam}->{'author'}{
+#                                  $h->{$ihave}->{$iam}->{$video_id}->{'author'}
+#                                                               }->{'videos'}
+#                              }
+#                  );
+#=cut
          }
          else
          {
@@ -428,11 +428,11 @@ WWW::YouTube::XML - General Extensible Markup Language capabilities go in here.
 
  Options;
 
-   TBD
+   --xml_*
 
 =head1 OPTIONS
 
-TBD
+--xml_*
 
 =head1 DESCRIPTION
 
@@ -444,7 +444,7 @@ I<L<WWW::YouTube>> I<L<WWW::YouTube::ML>> I<L<WWW::YouTube::HTML>> I<L<WWW::YouT
 
 =head1 AUTHOR
 
- Copyright (C) 2006 Eric R. Meyers <ermeyers@adelphia.net>
+ Copyright (C) 2006 Eric R. Meyers E<lt>ermeyers@adelphia.netE<gt>
 
 =cut
 

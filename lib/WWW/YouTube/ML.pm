@@ -10,7 +10,7 @@ use warnings;
 #my $VERSION="0.1";
 
 #For CVS , use following line
-our $VERSION=sprintf("%d.%04d", q$Revision: 2006.0606 $ =~ /(\d+)\.(\d+)/);
+our $VERSION=sprintf("%d.%04d", q$Revision: 2006.0609 $ =~ /(\d+)\.(\d+)/);
 
 BEGIN {
 
@@ -109,7 +109,7 @@ $WWW::YouTube::ML::numeric_delay_sec = WWW::YouTube::ML::numeric_delay_sec(); ##
 
 $WWW::YouTube::ML::string_tag = undef;
 
-##$WWW::YouTube::ML::string_vlbt_want = 'all';##$WWW::YouTube::ML::API::string_vlbt_want;
+$WWW::YouTube::ML::string_vlbt_want = $WWW::YouTube::ML::API::string_vlbt_want;
 
 ##debug##WWW::YouTube::ML::API::show_all_opts( \%WWW::YouTube::ML::opts_type_args );
 
@@ -312,8 +312,10 @@ sub WWW::YouTube::ML::vlbt
    my $h = shift;
 
    ##
-   ## ML: so I can make XML curr_page calls right and set HTML curr_page, etc.
+   ## ML: so I can make XML curr_page calls right and set HTML curr_page, etc. ## What? To myself.
    ##
+
+   $WWW::YouTube::ML::API::string_vlbt_want = $WWW::YouTube::ML::string_vlbt_want; ## ML::API bogus
 
    if ( $WWW::YouTube::ML::API::string_vlbt_want ne 'all' )
    {
@@ -324,7 +326,7 @@ sub WWW::YouTube::ML::vlbt
    }
    elsif ( $WWW::YouTube::XML::API::string_vlbt_want eq $WWW::YouTube::HTML::API::string_vlbt_want )
    {
-      $WWW::YouTube::ML::API::string_vlbt_want = $WWW::YouTube::XML::API::string_vlbt_want;
+      $WWW::YouTube::ML::string_vlbt_want = $WWW::YouTube::XML::API::string_vlbt_want;
 
       $WWW::YouTube::ML::API::string_vlbt_want = $WWW::YouTube::HTML::API::string_vlbt_want;
 
@@ -375,7 +377,7 @@ sub WWW::YouTube::ML::vlbt
 
    $h->{'video_list'}->{'tag'} = $h->{'tag'};
 
-   if ( ( $WWW::YouTube::HTML::API::string_vlbt_want ne 'none' ) ||
+   if ( ( $WWW::YouTube::XML::API::string_vlbt_want ne 'none' ) ||
         ( $WWW::YouTube::HTML::API::string_vlbt_want ne 'none' )
       )
    {
@@ -456,39 +458,39 @@ sub WWW::YouTube::ML::vlbt
 
 } ## end sub WWW::YouTube::ML::vlbt
 
-=cut
-   if ( ! defined( $h->{'tag'} ) )
-   {
-      my $term = Term::ReadLine->new('vlbt');
-
-      $h->{'tag'} = $term->get_reply(
-                           'prompt' => 'What tag do you want?',
-                           'default' => $h->{'tag_dir'},
-                                    );
-
-   } ## end if
-=cut
+#=cut
+#   if ( ! defined( $h->{'tag'} ) )
+#   {
+#      my $term = Term::ReadLine->new('vlbt');
+#
+#      $h->{'tag'} = $term->get_reply(
+#                           'prompt' => 'What tag do you want?',
+#                           'default' => $h->{'tag_dir'},
+#                                    );
+#
+#   } ## end if
+#=cut
 
 1;
 __END__ ## package WWW::YouTube::ML
 
 =head1 NAME
 
-WWW::YouTube::ML - WWW::YouTube Markup Language, an Abstraction
+WWW::YouTube::ML - WWW::YouTube Markup Language, an Abstraction Layer
 
 =head1 SYNOPSIS
 
  Options;
 
-   TBD
+   --ml_*
 
 =head1 OPTIONS
 
-TBD
+--ml_*
 
 =head1 DESCRIPTION
 
-ML just stands for Markup Language, in a Abstract way, for HTML, XML, SGML or YAML or whatever gets included as ML capabilities. 
+ML just stands for Markup Language, in a Abstract way, for HTML, XML, SGML or YAML or whatever gets included as ML capabilities.
 
 =head1 SEE ALSO
 
@@ -496,6 +498,6 @@ I<L<WWW::YouTube>> I<L<WWW::YouTube::ML::API>> I<L<WWW::YouTube::HTML>> I<L<WWW:
 
 =head1 AUTHOR
 
- Copyright (C) 2006 Eric R. Meyers <ermeyers@adelphia.net>
+ Copyright (C) 2006 Eric R. Meyers E<lt>ermeyers@adelphia.netE<gt>
 
 =cut

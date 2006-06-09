@@ -10,7 +10,7 @@ use warnings;
 #my $VERSION="0.1";
 
 #For CVS , use following line
-our $VERSION=sprintf("%d.%04d", q$Revision: 2006.0606 $ =~ /(\d+)\.(\d+)/);
+our $VERSION=sprintf("%d.%04d", q$Revision: 2006.0609 $ =~ /(\d+)\.(\d+)/);
 
 BEGIN {
 
@@ -656,11 +656,11 @@ WWW::YouTube::HTML::API - How to Interface with YouTube using HTTP Protocol, CGI
 
  Options;
 
-   TBD
+   --html_api_*
 
 =head1 OPTIONS
 
-TBD
+--html_api_*
 
 =head1 DESCRIPTION
 
@@ -672,7 +672,7 @@ I<L<WWW::YouTube>> I<L<WWW::YouTube::ML::API>> I<L<WWW::YouTube::HTML>> I<L<WWW:
 
 =head1 AUTHOR
 
- Copyright (C) 2006 Eric R. Meyers <ermeyers@adelphia.net>
+ Copyright (C) 2006 Eric R. Meyers E<lt>ermeyers@adelphia.netE<gt>
 
 =cut
 

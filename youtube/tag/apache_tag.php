@@ -80,15 +80,6 @@ print '<meta name="keywords" content="WWW::'.$interface_name.'::Com, User, Inter
 
 print '<title>Interface to WWW::' . $interface_name . '::Com</title>' ."\n";
 
-##$Period = 15; #sec
-
-#if ( 0 && $submitted_value != 'Pause' )
-#{
-#   print '<meta http-equiv="refresh" content="' . $Period .
-#         ';url=http://' . $SCRIPT .'?interface_action=?????&interface_name=' . $interface_name . '">' ."\n";
-#
-#} ## end if
-
 print '</head>' ."\n";
 
 print '<body>' ."\n";
@@ -107,7 +98,7 @@ else
 if ( isset( $_GET['sstr'] ) )
 {
    $sstr_value = preg_replace( '/[`]/', '', $_GET['sstr'] );
- 
+
 }
 else
 {
@@ -127,12 +118,19 @@ else
 } ## end if
 
 $vlbt_wnt = 'found';
+
 $vlbt_dly = 1; ## I'll calc this
+
 $vlbt_1st = 1;
+
 $vlbt_max = 2;
+
 $vlbt_per = 6;
+
 $vlbt_col = 3;
+
 $vlbt_siz = 'large_window';
+
 $vlbt_flg = '';
 
 $vlbt_type = '';
@@ -165,7 +163,9 @@ if ( isset( $_GET['method'] ) )
    if ( $method_value == 'stdmethod' )
    {
       $stdmethod_rbtn = '<input type="radio" name="method" value="stdmethod" checked>';
+
       $auto_play_rbtn = '<input type="radio" name="method" value="auto_play">';
+
       $thumbnail_rbtn = '<input type="radio" name="method" value="thumbnail">';
 
    }
@@ -176,14 +176,18 @@ if ( isset( $_GET['method'] ) )
       if ( $method_value == 'auto_play' )
       {
          $stdmethod_rbtn = '<input type="radio" name="method" value="stdmethod">';
+
          $auto_play_rbtn = '<input type="radio" name="method" value="auto_play" checked>';
+
          $thumbnail_rbtn = '<input type="radio" name="method" value="thumbnail">';
 
       }
       elseif ( $method_value == 'thumbnail' )
       {
          $stdmethod_rbtn = '<input type="radio" name="method" value="stdmethod">';
+
          $auto_play_rbtn = '<input type="radio" name="method" value="auto_play">';
+
          $thumbnail_rbtn = '<input type="radio" name="method" value="thumbnail" checked>';
 
       } ## end if
@@ -194,7 +198,9 @@ if ( isset( $_GET['method'] ) )
 else
 {
    $stdmethod_rbtn = '<input type="radio" name="method" value="stdmethod" checked>';
+
    $auto_play_rbtn = '<input type="radio" name="method" value="auto_play">';
+
    $thumbnail_rbtn = '<input type="radio" name="method" value="thumbnail">';
 
 } ## end if
@@ -206,7 +212,9 @@ if ( isset( $_GET['want'] ) )
    if ( $vlbt_wnt == 'all' )
    {
       $want_all_rbtn = '<input type="radio" name="want" value="all" checked>';
+
       $want_fnd_rbtn = '<input type="radio" name="want" value="found">';
+
       $want_nfd_rbtn = '<input type="radio" name="want" value="not_found">';
 
    }
@@ -215,14 +223,18 @@ if ( isset( $_GET['want'] ) )
       if ( $vlbt_wnt == 'found' )
       {
          $want_all_rbtn = '<input type="radio" name="want" value="all">';
+
          $want_fnd_rbtn = '<input type="radio" name="want" value="found" checked>';
+
          $want_nfd_rbtn = '<input type="radio" name="want" value="not_found">';
 
       }
       elseif ( $vlbt_wnt == 'not_found' )
       {
          $want_all_rbtn = '<input type="radio" name="want" value="all">';
+
          $want_fnd_rbtn = '<input type="radio" name="want" value="found">';
+
          $want_nfd_rbtn = '<input type="radio" name="want" value="not_found" checked>';
 
       } ## end if
@@ -235,7 +247,9 @@ else
    $vlbt_wnt = 'all';
 
    $want_all_rbtn = '<input type="radio" name="want" value="all" checked>';
+
    $want_fnd_rbtn = '<input type="radio" name="want" value="found">';
+
    $want_nfd_rbtn = '<input type="radio" name="want" value="not_found">';
 
 } ## end if
@@ -321,7 +335,7 @@ print '</font></td>'. "\n";
 
 print '<td width=20%><font size=-1>'. "\n";
 
-print '<ul><li><strong><em>S</em></strong> : Submit</li></ul>' ."\n";
+print '<ul><li>[<strong><em>S</em></strong>] : Submit</li></ul>' ."\n";
 
 print '</td></font>'. "\n";
 
@@ -329,7 +343,7 @@ print '<td align="center">'. "\n";
 
 print '<a target="_blank" href="http://users.adelphia.net/~ermeyers">' . $AUTHOR .
       '<br>'.
-      '<img src="/youtube/tag/images/ERMpowered.gif"></a>' .
+      '<img src="/youtube/images/ERMpowered.gif"></a>' .
       '<br>' .
       '<strong><em><font size=-1>to protect children</font></em></strong>'. "\n";
 
@@ -341,7 +355,7 @@ print '<tr>' ."\n";
 
 print '<td align="center" colspan=3>'. "\n";
 
-print $arm_cbox . '<em>PARENT</em>: If you&apos;re logging into ' . $interface_name . ' to flag videos, like me, then use my armed interface.' ."\n";
+print $arm_cbox . '<em>PARENTS</em>: If you&apos;re logging into ' . $interface_name . ' to flag videos, like me, then use my armed interface.' ."\n";
 
 print '</td>'. "\n";
 
@@ -515,7 +529,7 @@ print '<td colspan=1>'. "\n";
 
 print '<a target="view_results" href="/youtube/tag/"><strong><em>View results:</em></strong></a>' ."\n";
 
-if ( $interface_action == $actionlist['vlbt'] )
+if ( $interface_action == $actionlist['vlbt'] && $sstr_value != '' )
 {
    $sstr_canon = preg_replace( '/\s+/', '_nbsp_', $sstr_value );
 
@@ -530,13 +544,13 @@ if ( $interface_action == $actionlist['vlbt'] )
 }
 elseif ( $interface_action == $actionlist['vlbu'] )
 {
-   #print shell_exec( '/sbin/ifdown ' . $interface_name . ' 2>&1' );
+   #print shell_exec( 'do_something_here ' . $interface_name . ' 2>&1' );
 
 } ## end if
 
-if ( isset( $_GET{'canon'} ) )
+if ( isset( $_GET{'cannon'} ) )
 {
-   remove_directory( '/var/www/html/youtube/tag/tag_'.$_GET{'canon'} );
+   remove_directory( '/var/www/html/youtube/tag/tag_'.$_GET{'cannon'} );
 
 } ## end if
 
@@ -553,10 +567,9 @@ if ( ( $interface_action == $actionlist['vlbt'] ) &&
      ( $sstr_value != '' )
    )
 {
-   #print '<pre>' ."\n";
-
    print shell_exec( 'umask 0000;/var/www/html/youtube/tag/tag.plx' .
-                     ' \'--ml_tag=' . $sstr_value . '\' ' .
+                     ' --apache' .
+                     ' --ml_tag=' . $sstr_canon . ' ' .
                      ' --ml_vlbt_want=' . $vlbt_wnt .
                      ' --ml_delay_sec=' . $vlbt_dly .
                      ' --ml_first_page=' . $vlbt_1st .
@@ -568,12 +581,10 @@ if ( ( $interface_action == $actionlist['vlbt'] ) &&
                      ' 2>&1'
                    );
 
-   #print '</pre>' ."\n";
-
 }
 elseif ( $interface_action == $actionlist['vlbu'] )
 {
-   #print shell_exec( '/sbin/ifdown ' . $interface_name . ' 2>&1' );
+   #print shell_exec( 'do_something_here ' . $interface_name . ' 2>&1' );
 
 } ## end if
 
@@ -660,7 +671,7 @@ function list_tag_results( $dir, $rmdir_flag, $sstr_excluded )
       }
       else
       {
-         print '<a href="' . $IAM . '?canon=' . $item_canon . '">' . $item . '</a>' ."\n";
+         print '<a href="' . $IAM . '?cannon=' . $item_canon . '">' . $item . '</a>' ."\n";
 
       } ## end if
 
@@ -703,3 +714,4 @@ function remove_directory( $dir )
 -->
 </body>
 </html>
+

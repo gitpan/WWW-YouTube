@@ -17,7 +17,7 @@ require Date::Format;
 #my $VERSION="0.1";
 
 #For CVS , use following line
-our $VERSION = sprintf("%d.%04d", "Revision: 2006.0606" =~ /(\d+)\.(\d+)/);
+our $VERSION = sprintf("%d.%04d", "Revision: 2006.0609" =~ /(\d+)\.(\d+)/);
 
 BEGIN {
 
@@ -49,7 +49,7 @@ __PACKAGE__ =~ m/^(WWW::[^:]+)((::([^:]+))(::([^:]+))){0,1}$/g;
 %WWW::YouTube::opts_type_args =
 (
    'ido'            => $1,
-   'iknow'          => 'ut',
+   'iknow'          => 'yt',
    'iman'           => 'aggregate',
    'myp'            => __PACKAGE__,
    'opts'           => \%WWW::YouTube::opts,
@@ -58,7 +58,8 @@ __PACKAGE__ =~ m/^(WWW::[^:]+)((::([^:]+))(::([^:]+))){0,1}$/g;
    'urls'           => {},
    'opts_type_flag' =>
    [
-      'test_f',
+      'apache',
+      'mozilla',
    ],
    'opts_type_numeric' =>
    [
@@ -66,7 +67,8 @@ __PACKAGE__ =~ m/^(WWW::[^:]+)((::([^:]+))(::([^:]+))){0,1}$/g;
    ],
    'opts_type_string' =>
    [
-      'test_s',
+      'canon_tag',
+      'mozilla_bin',
    ],
 
 );
@@ -80,9 +82,11 @@ die( __PACKAGE__ ) if (
 
 WWW::YouTube::ML::API::create_opts_types( \%WWW::YouTube::opts_type_args );
 
-$WWW::YouTube::flag_test_f = 1;
+$WWW::YouTube::flag_apache = 0;
+$WWW::YouTube::flag_mozilla = 0;
 $WWW::YouTube::numeric_test_n = 999;
-$WWW::YouTube::string_test_s = 'this is a test';
+$WWW::YouTube::string_canon_tag = undef; ## _nbsp_
+$WWW::YouTube::string_mozilla_bin = '/usr/bin/firefox';
 
 ##debug## WWW::YouTube::ML::API::show_all_opts( \%WWW::YouTube::opts_type_args );
 
@@ -132,37 +136,80 @@ sub WWW::YouTube::show_all_opts
 ##
 sub WWW::YouTube::vlbt
 {
-   my $h = shift; ## not used yet
+   my $h = shift;
 
-   my $iam = File::Basename::basename( $0 );
+   my $iam = File::Basename::basename( $h->{'$0'} );
 
-   die ( "\$0=$0\n" ) if ( ! defined( $iam ) || ( $iam eq '' ) );
+   die ( "\$0=$h->{'$0'}\n" ) if ( ! defined( $iam ) || ( $iam eq '' ) );
+
+   chdir( $FindBin::Bin ); ## very critical move for subdirs named tag_*
 
    my $ml_tag = undef;
 
    my $ml_tag_subdir = undef;
 
-   my $dflt_ml_tag_subdir = undef;
+   my $basename_match = 0;
 
    if ( defined( $WWW::YouTube::ML::string_tag ) )
    {
       $ml_tag = $WWW::YouTube::ML::string_tag;
    }
+   elsif ( defined( $WWW::YouTube::string_canon_tag ) )
+   {
+      $ml_tag = $WWW::YouTube::string_canon_tag;
+
+      $ml_tag =~ s/_nbsp_/ /g;
+
+   }
    else
    {
+      $basename_match++;
+
       $iam =~ m/^([^_]+_([^.]+))[.]plx$/ || die "no basename match to start (iknow_iam.plx)\n";
 
       ( $ml_tag, $ml_tag_subdir ) = ( $2, $1 ); ##debug##print $tag . "\n";exit;
 
+      $ml_tag =~ s/_nbsp_/ /g;
+
    } ## end if
 
-   if ( defined ( $WWW::YouTube::ML::string_tag_subdir ) )
+   if ( defined( $WWW::YouTube::string_canon_tag ) )
    {
-      $ml_tag_subdir = $WWW::YouTube::ML::string_tag_subdir
+      $ml_tag_subdir = $WWW::YouTube::string_canon_tag; ## external parties play tag with us
+
+   }
+   elsif ( defined ( $WWW::YouTube::ML::string_tag_subdir ) )
+   {
+      $ml_tag_subdir = $WWW::YouTube::ML::string_tag_subdir;
 
    } ## end if
 
    WWW::YouTube::ML::vlbt( { 'tag' => $ml_tag, 'tag_subdir' => $ml_tag_subdir } );
+
+   if ( $WWW::YouTube::flag_mozilla )
+   {
+      my $url = sprintf( "file://%s/%s%s/%s%04d.html",
+                         $FindBin::Bin,
+                       ( $basename_match )? '' : 'tag_',
+                         $ml_tag_subdir,
+                       ( $WWW::YouTube::HTML::flag_disarm )? 'PNP' : 'P2P',
+                         $WWW::YouTube::ML::numeric_first_page,
+                       );
+
+      system( $WWW::YouTube::string_mozilla_bin . ' -remote "ping()" 2>/dev/null' );
+
+      if ( ! $? )
+      {
+         system( $WWW::YouTube::string_mozilla_bin . ' -remote "openurl('. $url . ',new-tab)"' );
+
+      }
+      else
+      {
+         system( '( ' . $WWW::YouTube::string_mozilla_bin . ' ' . $url . ' 2>&1 ) > /dev/null &' );
+
+      } ## end if
+
+   } ## end if
 
 } ## end sub WWW::YouTube::vlbt
 
@@ -171,245 +218,63 @@ __END__ ## package WWW::YouTube
 
 =head1 NAME
 
-WWW::YouTube - YouTube Developer Interface
+B<WWW::YouTube> - YouTube Development Interface (YTDI)
 
 =head1 SYNOPSIS
 
-use lib ( $ENV{'HOME'} );
+B<use lib ( $ENV{'HOME'} );>
 
-use WWW::YouTube::Com; ## SEE DESCRIPTION
+B<use WWW::YouTube::Com;> ## SEE DESCRIPTION
 
  Options;
 
-   TBD
+   --yt_*
 
 =head1 OPTIONS
 
-TBD
+--yt_*
 
 =head1 DESCRIPTION
 
-B<WWW::YouTube> is the I<Public> YouTube Development Interface.
+B<WWW::YouTube> is the I<Public> I<YouTube Development Interface> (YTDI).
 
-B<L<WWW::YouTube::Com>> is your I<Private> YouTube Development Interface.
+B<L<WWW::YouTube::Com>> is your I<Private> YouTube Developer's Interface.
 
-We need your private user, pass and dev_id defined here.
+We need your private B<user, pass and dev_id> defined here.
 
-To use this YouTube Developer Interface, you need to have a YouTube username and password, and you'll need to register with YouTube as a Developer in order to get a Developer ID for the YouTube XMLRPC API.
+To use the YouTube Development Interface (YTDI) through your own YouTube Developer's Interface, you need to have a YouTube username and password, and you'll need to register with YouTube as a Developer in order to get a Developer ID for the YouTube Developer's API at L<http://www.youtube.com/dev>.
 
-By the way, you need to go to YouTube at http://www.youtube.com to do your registering, and you must think up a really good excuse for wanting to become a registered YouTube Developer.  Something like helping me to develop programs to protect registered teenagers and the General Public, including children, from being exposed to too much adult content and other inappropriate material might work.
+By the way, you need to go directly to YouTube at L<http://www.youtube.com> to do your registering, and you must think up a really good excuse for your desire to become a registered YouTube Developer.
 
-http://www.youtube.com/profile?user=ermeyers
+(Something like helping me to develop programs to protect the registered teenagers and the General Public, including children, from being exposed to too much adult content and other inappropriate material might work.)
 
-Just because a YouTube video has been flagged as inappropriate material for the General Public, doesn't mean that you, as a registered adult, can't watch it.  Flagging keeps YouTube registered teenagers, and YouTube's unregistered viewing General Public, including children, from being able to view the contents of a video identified as an inappropriate video.
+README at L<http://www.youtube.com/profile?user=ermeyers>
 
-You'll need to educate yourself a little bit, and experiment with YouTube directly, before going Hog Wild with my YouTube applications, like I do, flagging video after video.  That's my purpose for this development project.
+Now, just because a public video on YouTube has been flagged as inappropriate material for the General Public, doesn't mean that a registered adult can't watch it.  Flagging keeps YouTube registered teenagers, and YouTube's unregistered General Public viewers, including children, from being able to view the contents of a public video identified as an inappropriate video, viewable by registered adults only, if they I<explicitly> choose to be viewing the public videos flagged as "inappropriate material," during their I<current> login session.
 
-http://www.youtube.com
-http://www.youtube.com/dev
+You'll need to I<educate> yourself and I<experiment> with YouTube I<directly>, before going hog-wild with my WWW::YouTube applications, like I do, flagging videos.  "To protect children," that's my central theme and purpose for this B<EXPERIMENTAL> I<YouTube Development Interface> (YTDI) project, called B<WWW::YouTube>.
 
--- So, now about your future YouTube development projects:
+What happens with the YTDI really depends on Who, What, When, Where and Which action it's activated.
 
-$ mkdir ~/WWW
-
-$ mkdir ~/WWW/YouTube
-
-/usr/bin/php $PERLLIB/WWW/YouTube/Com.pm B<user pass dev_id> > ~/WWW/YouTube/Com.pm
-
--- NOTE: php ...
-
--- Users/Videos data: XML-RPC Interface demo for this initial testing, training and development environment setup purpose.
-
-$ mkdir ~/youtube
-
-$ mkdir ~/youtube/video ## video application and data directory (We're not storing videos here)
-
-$ GET
-
-http://search.cpan.org/src/ERMEYERS/WWW-YouTube-2006.0606/youtube/video/video.plx
-
-> ~/youtube/video/video.plx
-
-$ chmod +x ~/youtube/video/video.plx
-
--- It's time for you to see this YouTube Developer API's page: http://www.youtube.com/dev
-
-$ ~/youtube/video/video.plx
-
-WWW::YouTube::XML::API::action{ugp_cache}:
-
-Calling $WWW::YouTube::XML::API::action{ugp_call}
-
-WWW::YouTube::XML::API::action{ulfv_cache}:
-
-Calling $WWW::YouTube::XML::API::action{ulfv_call}
-
-WWW::YouTube::XML::API::action{ulf_cache}:
-
-Calling $WWW::YouTube::XML::API::action{ulf_call}
-
-WWW::YouTube::XML::API::action{vlf_call}:
-
-WWW::YouTube::XML::API::action{vgd_cache}:
-
-Calling $WWW::YouTube::XML::API::action{vlf_call}
-
-Calling $WWW::YouTube::XML::API::action{vgd_call}
-
-WWW::YouTube::XML::API::action{vlbt_cache}:
-
-Calling $WWW::YouTube::XML::API::action{vlbt_call}
-
-WWW::YouTube::XML::API::action{vlbu_cache}:
-
-Calling $WWW::YouTube::XML::API::action{vlbu_call}
-
-WWW::YouTube::XML::API::action{vlf_cache}:
-
-Calling $WWW::YouTube::XML::API::action{vlf_call}
-
--- What else just happened?
-
-$ ls -1 ~/youtube/video
-
-lwpcookies_username.txt ## your YouTube username cookies
-
-ugp_cache ## ugp = youtube.users.get_profile
-
-ulf_cache ## ulf = youtube.users.list_friends
-
-ulfv_cache ## ulfv = youtube.users.list_favorite_videos
-
-vgd_cache ## vgd = youtube.videos.get_details
-
-video.plx
-
-vlbt_cache ## vlbt = youtube.videos.list_by_tag
-
-vlbu_cache ## vlbu = youtube.videos.list_by_user
-
-vlf_cache ## vlf = youtube.videos.list_featured
-
--- Look at my YouTube profile returned from the ugp_call and stored in the ugp_cache
-
-$ zcat ~/youtube/video/ugp_cache/ermeyers.xml.gz | more
-
-$ man XML::Dumper
-
--- OK?
-
--- And, so now, your ready for my 'tag' application: ( vlbt = youtube.videos.list_by_tag )
-
--- Let's setup to play videos by 'tag'
-
--- As your username:
-
-$ mkdir ~/youtube/tag ## tag application directory
-
--- There will come a very helpful user named apache to play videos by 'tag' with you!
-
--- NOTE: SELinux causes problems running perl under Apache [ email me, if need be ]
-
-$ chmod -R a+w ~/youtube/video
-
-$ chmod a+w ~/youtube/tag
-
--- As your root:
-
-# ln -s ~username/youtube /var/www/youtube
-
-# ln -s ~username/WWW /var/www/WWW
-
-# ln -s ~username/youtube /var/www/html/youtube
-
--- As your username:
-
-$ GET
-
-http://search.cpan.org/src/ERMEYERS/WWW-YouTube-2006.0606/youtube/tag/images/ERMpowered.gif
-
-> ~/youtube/tag/images/ERMpowered.gif
-
-$ chmod a+r ~/youtube/tag/images/ERMpowered.gif
-
-$ GET
-
-http://search.cpan.org/src/ERMEYERS/WWW-YouTube-2006.0606/youtube/tag/tag.php
-
-> ~/youtube/tag/tag.php
-
-$ chmod a+x ~/youtube/tag/tag.php
-
-$ GET
-
-http://search.cpan.org/src/ERMEYERS/WWW-YouTube-2006.0606/youtube/tag/tag.plx
-
-> ~/youtube/tag/tag.plx
-
-$ chmod a+x ~/youtube/tag/tag.plx
-
-$ GET http://localhost/youtube/tag/tag.php ## DOES IT WORK FOR YOU NOW?
-
--- Security Level Config: /usr/bin/system-config-securitylevel.
-
--- Try checking "Disable SELinux protection for httpd daemon," so that you can run perl scripts under Apache.
-
--- Currently I have FC4 Linux, Apache 2.0, and I couldn't do Perl CGI.pm or load mod_perl at all. :(
-
--- NOTE: ~/youtube/tag/tag.plx works from the command line too, but it's not as much fun that way.
-
-$ ~/youtube/tag/tag.plx '--ml_tag=very nice girl' --html_disarm --html_thumbnail --ml_max_pages=1
-
-$ ls ~/youtube/tag/tag_very_nbsp_nice_nbsp_girl
-
-$ ~/youtube/tag/tag.plx '--ml_tag=very hot girl' --html_columns=3 --ml_per_page=6 --ml_max_pages=5
-
-$ ls ~/youtube/tag/tag_very_nbsp_hot_nbsp_girl
+And Why, and How?  What I<actually> happens, Why or How it I<happened>, really matters in this world we live in, doesn't it?
 
 Matthew 3:12, "His winnowing fork is in his hand, and he will clear his threshing floor, gathering his wheat into the barn and burning up the chaff with unquenchable fire." -- NIV
 
---I've got I<children>, and I developed this program to flag videos as I<inappropriate> material. I run by tag to flag junk videos.
+README AGAIN at L<http://www.youtube.com/profile?user=ermeyers>
 
-  * P : Pornography or Obscenity
-  * I : Illegal Acts
-  * G : Graphic Violence
-  * R : Racially or Ethnically Offensive Content
-
-  * S : Submit to YouTube
-
-I'd like your help with this protective flagging effort, on occasion.  Thanks.
-
-With regard to the colored Video "Tag" and Video "Author" labels displayed, corresponding to the Video's tags or the Author's username at YouTube:
-
-  * Green  : Found, and your tag string matched Exactly.
-  * Yellow : Found, but your tag string matched in a Partial or a Fuzzy way.
-  * Red    : no match found.
-
-I have tag display options for this:
-
-  --ml_want=[all|found|not_found] ## What's saved and displayed
-
-  --xml_want=[all|found|not_found] ## What's saved
-
-  --html_want=[all|found|not_found] ## What's displayed
+WWW::YouTube: "Keep it FUN, CLEAN and REAL," -- "to protect children!"
 
 =head1 SEE ALSO
 
-What else is there to see, after seeing some '--ml_tag=very hot girl' on YouTube?  You asked...
-
-I<L<WWW::YouTube::Com>> I<L<WWW::YouTube::ML>> I<L<WWW::YouTube::XML>> I<L<WWW::YouTube::HTML>> 
+I<L<WWW::YouTube::Com>> I<L<WWW::YouTube::ML>> I<L<WWW::YouTube::XML>> I<L<WWW::YouTube::HTML>>
 
 =head1 AUTHOR
 
-Eric R. Meyers <ermeyers@adelphia.net>
+Copyright (C) 2006 Eric R. Meyers E<lt>ermeyers@adelphia.netE<gt>
 
 =head1 LICENSE
 
 perl
-
-=head1 COPYRIGHT
-
-Copyright (C) 2006 Eric R. Meyers <ermeyers@adelphia.net>
 
 =cut
 

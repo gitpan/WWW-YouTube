@@ -10,7 +10,7 @@ use warnings;
 #my $VERSION="0.1";
 
 #For CVS , use following line
-our $VERSION=sprintf("%d.%04d", q$Revision: 2006.0606 $ =~ /(\d+)\.(\d+)/);
+our $VERSION=sprintf("%d.%04d", q$Revision: 2006.0609 $ =~ /(\d+)\.(\d+)/);
 
 BEGIN {
 
@@ -45,21 +45,29 @@ WWW::YouTube::Com - Complete the setup of WWW::YouTube with needed personal para
 
 =head1 SYNOPSIS
 
-WWW::YouTube::Com is your private package of secrets for WWW::YouTube to function.
+-- Now about your future YouTube Development Interface projects:
 
-This perl package is for your secrets to be kept (but used) by WWW::YouTube applications.
+$ mkdir ~/WWW
+
+$ mkdir ~/WWW/YouTube
+
+/usr/bin/php $PERLLIB/WWW/YouTube/Com.pm B<user pass dev_id> > ~/WWW/YouTube/Com.pm
+
+-- NOTE: php ...
 
  Options;
 
-   NONE
+   B<user pass dev_id>
 
 =head1 OPTIONS
 
-NONE
+ B<user pass dev_id> from registering with http://www.youtube.com as a YouTube Developer
 
 =head1 DESCRIPTION
 
- user pass dev_id from registering with http://www.youtube.com as a developer
+B<WWW::YouTube::Com> is your private package of secrets for B<WWW::YouTube> to function.
+
+This perl package is for your secrets to be kept at home (but used) by B<WWW::YouTube> applications.
 
 =head1 SEE ALSO
 
@@ -67,6 +75,6 @@ I<L<WWW::YouTube>>
 
 =head1 AUTHOR
 
- Copyright (C) 2006 Eric R. Meyers <ermeyers@adelphia.net>
+ Copyright (C) 2006 Eric R. Meyers E<lt>ermeyers@adelphia.netE<gt>
 
 =cut

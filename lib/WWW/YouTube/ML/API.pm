@@ -10,7 +10,7 @@ use warnings;
 ##my $VERSION="0.1";
 
 #For CVS , use following line
-our $VERSION=sprintf("%d.%04d", q$Revision: 2006.0606 $ =~ /(\d+)\.(\d+)/);
+our $VERSION=sprintf("%d.%04d", q$Revision: 2006.0609 $ =~ /(\d+)\.(\d+)/);
 
 BEGIN {
 
@@ -352,11 +352,11 @@ WWW::YouTube::ML::API - How to Interface with YouTube in general.
 
  Options;
 
-   TBD
+   --ml_api_*
 
 =head1 OPTIONS
 
-TBD
+--ml_api_*
 
 =head1 DESCRIPTION
 
@@ -368,6 +368,6 @@ I<L<WWW::YouTube>> I<L<WWW::YouTube::ML>> I<L<WWW::YouTube::HTML::API>> I<L<WWW:
 
 =head1 AUTHOR
 
- Copyright (C) 2006 Eric R. Meyers <ermeyers@adelphia.net>
+ Copyright (C) 2006 Eric R. Meyers E<lt>ermeyers@adelphia.netE<gt>
 
 =cut

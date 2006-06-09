@@ -18,7 +18,10 @@ README
 t/test0.pl.t
 t/use_me/test0.pl.t
 Makefile.PL
-youtube/tag/tag.php
-youtube/tag/tag.plx
 youtube/video/video.plx
+youtube/tag/tag.plx
+youtube/tag/mozilla_tag.php
+youtube/tag/mozilla_tag_agent.sh
+youtube/tag/apache_tag.php
+youtube/images/ERMpowered.gif
 SIGNATURE    Added here by Module::Build

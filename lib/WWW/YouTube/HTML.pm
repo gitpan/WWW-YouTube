@@ -10,7 +10,7 @@ use warnings;
 #my $VERSION="0.1";
 
 #For CVS , use following line
-our $VERSION=sprintf("%d.%04d", q$Revision: 2006.0606 $ =~ /(\d+)\.(\d+)/);
+our $VERSION=sprintf("%d.%04d", q$Revision: 2006.0609 $ =~ /(\d+)\.(\d+)/);
 
 BEGIN {
 
@@ -915,18 +915,18 @@ sub WWW::YouTube::HTML::vlbt  ## NOTE: changing to collect data for xml dump, th
 {
    my $h = shift;
 
-=cut
-   (
-     $h->{'tag'},
-     $h->{'wrkdir'},
-     $h->{'first_page'},
-     $h->{'last_page'},
-     $h->{'per_page'},
-     $h->{'video_list'},
-     $h->{'xmlfile'},
-     $h->{'xmldumper'},
-   );
-=cut
+#=cut
+#   (
+#     $h->{'tag'},
+#     $h->{'wrkdir'},
+#     $h->{'first_page'},
+#     $h->{'last_page'},
+#     $h->{'per_page'},
+#     $h->{'video_list'},
+#     $h->{'xmlfile'},
+#     $h->{'xmldumper'},
+#   );
+#=cut
 
    ##
    ## HTML
@@ -968,16 +968,29 @@ sub WWW::YouTube::HTML::vlbt  ## NOTE: changing to collect data for xml dump, th
 
    my @video_id = keys %{$h->{$ihave}->{$iam}}; ## video IDs returned XML::vlbt
 
-   my $mypage_cnt_saved = $h->{'last_page'} - $h->{'first_page'} + 1;
-
-   my $mypage_cnt = 0; ## number of pages process so far
-
+   ##
+   ## Get rid of stuff we don't want to see (vlbt has no author, need vgd video_detail to get author)
+   ##
    for( my $i = 0; $i <= $#video_id; $i++ )
    {
-      if ( (   $h->{'found_tagged'}->{$video_id[$i]} &&
-           (   $h->{'video_list'}->{'just'} eq 'not_found'   ) ) ||
-           ( ! $h->{'found_tagged'}->{$video_id[$i]} &&
-           (   $h->{'video_list'}->{'just'} eq 'found'       ) )
+      if ( ! $h->{'found_author'}->{$video_id[$i]} ) ## && ( $h->{'video_list'}->{'just'} eq 'found_author' ) )
+      {
+         $h->{'video_id'} = $video_id[$i];
+
+         $h = WWW::YouTube::XML::vgd( $h );
+
+         die ( "WWW::YouTube::XML::vgd call\n" ) if ( ! $h->{'video_detail'}{'ok'} );
+
+         delete( $h->{'video_id'} );
+
+         $h->{$ihave}->{$iam}{$video_id[$i]}->{'author'} = $h->{'video_detail'}->{'vgd'}{$video_id[$i]}->{'author'}
+
+      } ## end if
+
+      if ( (   $h->{'found_tagged'}->{$video_id[$i]} && (   $h->{'video_list'}->{'just'} eq 'not_found_tagged'   ) ) ||
+           ( ! $h->{'found_tagged'}->{$video_id[$i]} && (   $h->{'video_list'}->{'just'} eq 'found_tagged'       ) ) ||
+           (   $h->{'found_author'}->{$video_id[$i]} && ( $h->{'video_list'}->{'just'} eq 'not_found_author' ) ) ||
+           ( ! $h->{'found_author'}->{$video_id[$i]} && ( $h->{'video_list'}->{'just'} eq 'found_author'     ) )
          )
       {
          splice( @video_id, $i--, 1 ); ## remove item at $i
@@ -985,6 +998,10 @@ sub WWW::YouTube::HTML::vlbt  ## NOTE: changing to collect data for xml dump, th
       } ## end if
 
    } ## end foreach
+
+   my $mypage_cnt_saved = $h->{'last_page'} - $h->{'first_page'} + 1;
+
+   my $mypage_cnt = 0; ## number of pages process so far
 
    my $myitem_cnt_saved = $#video_id + 1; ## number of videos returned XML::vlbt
 
@@ -994,6 +1011,8 @@ sub WWW::YouTube::HTML::vlbt  ## NOTE: changing to collect data for xml dump, th
 
    foreach $video_id ( @video_id )
    {
+      my $author = $h->{$ihave}->{$iam}{$video_id}->{'author'};
+
       if ( (   $h->{'found_tagged'}->{$video_id} && ( $h->{'video_list'}->{'just'} eq 'not_found_tagged' ) ) ||
            ( ! $h->{'found_tagged'}->{$video_id} && ( $h->{'video_list'}->{'just'} eq 'found_tagged'     ) ) ||
            (   $h->{'found_author'}->{$video_id} && ( $h->{'video_list'}->{'just'} eq 'not_found_author' ) ) ||
@@ -1011,7 +1030,7 @@ sub WWW::YouTube::HTML::vlbt  ## NOTE: changing to collect data for xml dump, th
       }
       else
       {
-         ##debug##printf( "[2]number of videos returned=%d\n", $myitem_cnt_saved );
+         ##debug## printf( "[2]number of videos returned=%d\n", $myitem_cnt_saved );
 
          ##
          ## This block includes videos in the pages created
@@ -1020,6 +1039,8 @@ sub WWW::YouTube::HTML::vlbt  ## NOTE: changing to collect data for xml dump, th
          $myitem_cnt++;
 
          my $vlbt_ref = $h->{$ihave}->{$iam}{$video_id}; ## for brevity
+
+         ##debug##$h->{'found_author'}->{$video_id} = 0; ## reset
 
          ##
          ## Start a page
@@ -1139,24 +1160,6 @@ sub WWW::YouTube::HTML::vlbt  ## NOTE: changing to collect data for xml dump, th
 
             my $myhtml = sprintf( "file://${myprivate}%04d.html", $curr_page );
 
-            my $author = $vlbt_ref->{'author'};
-
-            if ( ! $h->{'found_author'}->{$video_id} )
-            {
-               $h->{'video_id'} = $video_id;
-
-               $h = WWW::YouTube::XML::vgd( $h );
-
-               die ( "WWW::YouTube::XML::vgd call\n" ) if ( ! $h->{'video_detail'}{'ok'} );
-
-               delete( $h->{'video_id'} );
-
-               my $vgd_ref = $h->{'video_detail'}->{'vgd'}{$video_id}; ## for brevity
-
-               $author = $vgd_ref->{'author'};
-
-            } ## end if
-
             $midframe .=
                        '<table>' ."\n".
                        ' <tr valign="bottom">' ."\n".
@@ -1249,7 +1252,7 @@ sub WWW::YouTube::HTML::vlbt  ## NOTE: changing to collect data for xml dump, th
 
          } ## end if
 
-         ##debug##printf( "[1]number of videos processed=%d of %d\n", $myitem_cnt, $myitem_cnt_saved );
+         ##debug## printf( "[1]number of videos processed=%d of %d\n", $myitem_cnt, $myitem_cnt_saved );
 
          ##
          ## Complete <tbody>, etc.
@@ -1759,11 +1762,11 @@ WWW::YouTube::HTML - General Hyper-Text Markup Language capabilities go in here.
 
  Options;
 
-   TBD
+   --html_*
 
 =head1 OPTIONS
 
-TBD
+--html_*
 
 =head1 DESCRIPTION
 
@@ -1775,7 +1778,6 @@ I<L<WWW::YouTube>> I<L<WWW::YouTube::ML>> I<L<WWW::YouTube::HTML::API>> I<L<WWW:
 
 =head1 AUTHOR
 
- Copyright (C) 2006 Eric R. Meyers <ermeyers@adelphia.net>
+ Copyright (C) 2006 Eric R. Meyers E<lt>ermeyers@adelphia.netE<gt>
 
 =cut
-
