@@ -1,3 +1,4 @@
+##
 ## WWW::YouTube::ML
 ##
 package WWW::YouTube::ML;
@@ -10,7 +11,7 @@ use warnings;
 #my $VERSION="0.1";
 
 #For CVS , use following line
-our $VERSION=sprintf("%d.%04d", q$Revision: 2006.0609 $ =~ /(\d+)\.(\d+)/);
+our $VERSION=sprintf("%d.%04d", q$Revision: 2006.0615 $ =~ /(\d+)\.(\d+)/);
 
 BEGIN {
 
@@ -216,7 +217,7 @@ sub WWW::YouTube::ML::numeric_per_page
 {
    my $set = shift;
 
-   my $max_per_page = 100; ## youtube limit
+   my $max_per_page = 100; ## youtube vlbt limit, their default is 20 per page
 
    my $mod_per_page = $max_per_page + 1;
 
@@ -480,13 +481,28 @@ WWW::YouTube::ML - WWW::YouTube Markup Language, an Abstraction Layer
 
 =head1 SYNOPSIS
 
- Options;
-
-   --ml_*
+Options (--ml_* options);
 
 =head1 OPTIONS
 
---ml_*
+--ml_* options:
+
+opts_type_flag:
+
+   NONE
+
+opts_type_numeric:
+
+   --ml_delay_sec=number
+   --ml_first_page=number
+   --ml_max_pages=number
+   --ml_last_page=number
+   --ml_per_page=number
+
+opts_type_string:
+
+   --ml_tag=string
+   --ml_vlbt_want=string
 
 =head1 DESCRIPTION
 

@@ -1,3 +1,4 @@
+##
 ## WWW::YouTube::ML::API
 ##
 package WWW::YouTube::ML::API; ## All Markup Language API
@@ -10,7 +11,7 @@ use warnings;
 ##my $VERSION="0.1";
 
 #For CVS , use following line
-our $VERSION=sprintf("%d.%04d", q$Revision: 2006.0609 $ =~ /(\d+)\.(\d+)/);
+our $VERSION=sprintf("%d.%04d", q$Revision: 2006.0615 $ =~ /(\d+)\.(\d+)/);
 
 BEGIN {
 
@@ -32,6 +33,8 @@ __PACKAGE__ =~ m/^(WWW::[^:]+)::([^:]+)(::([^:]+)){0,1}$/;
 ##debug## print( "API! $1::$2::$4\n" );
 
 ##debug## exit;
+
+require File::Spec;
 
 require DBI; require XML::Dumper; ##require SQL::Statement;
 
@@ -86,7 +89,12 @@ die( __PACKAGE__ ) if (
 ##debug####don't##WWW::YouTube::ML::API::create_opts_types( \%WWW::YouTube::ML::API::opts_type_args );
 
 $WWW::YouTube::ML::API::numeric_max_try = 5;
-$WWW::YouTube::ML::API::string_dbm_dir = "$ENV{'HOME'}/youtube/video/dbm/ml";
+$WWW::YouTube::ML::API::string_dbm_dir = File::Spec->catfile( $ENV{'HOME'},
+                                                              'youtube',
+                                                              'video',
+                                                              'dbm',
+                                                              'ml'
+                                                            );
 $WWW::YouTube::ML::API::string_vlbt_want = 'all';
 
 ##debug####don't##WWW::YouTube::ML::register_all_opts( \%WWW::YouTube::ML::API::opts_type_args );
@@ -146,8 +154,9 @@ sub WWW::YouTube::ML::API::create_opts_types
       ##
       ## specifying filenames without filename suffix
       ##
-      $opts_type_args->{'opts_filename'}{$opt_type} =  ## path/youtube_ml_x
-                        $Bin_dir. '/' . lc( $opts_type_args->{'ido'} ) . '_' . $opt_ml_tag;
+      $opts_type_args->{'opts_filename'}{$opt_type} =  File::Spec->catfile(
+         $Bin_dir, lc( $opts_type_args->{'ido'} ) . '_' . $opt_ml_tag
+                                                                         ); ## path/youtube_ml_x
 
       push( @{$opts_type_args->{'export_ok'}}, $opt_tag );
 
@@ -350,13 +359,28 @@ WWW::YouTube::ML::API - How to Interface with YouTube in general.
 
 =head1 SYNOPSIS
 
- Options;
-
-   --ml_api_*
+Options (--ml_api_* options);
 
 =head1 OPTIONS
 
---ml_api_*
+--ml_api_* options:
+
+opts_type_flag:
+
+   --ml_api_ua_dmp
+   --ml_api_request_dmp
+   --ml_api_result_dmp
+   --ml_api_tree_dmp
+   --ml_api_video_dmp
+
+opts_type_numeric:
+
+   --ml_api_max_try=number
+
+opts_type_string:
+
+   --ml_api_dbm_dir=string
+   --ml_api_vlbt_want=string
 
 =head1 DESCRIPTION
 

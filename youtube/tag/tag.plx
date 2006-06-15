@@ -9,7 +9,7 @@ use warnings;
 ##my $VERSION="0.1";
 
 #For CVS , use following line
-our $VERSION=sprintf("%d.%04d", q$Revision: 2006.0609 $ =~ /(\d+)\.(\d+)/);
+our $VERSION=sprintf("%d.%04d", q$Revision: 2006.0615 $ =~ /(\d+)\.(\d+)/);
 
 BEGIN {
 
@@ -235,7 +235,7 @@ B<$ mkdir> ~/youtube/images ## youtube application images directory
 
 B<$ GET>
 
-http://search.cpan.org/src/ERMEYERS/WWW-YouTube-2006.0609/youtube/images/ERMpowered.gif
+http://search.cpan.org/src/ERMEYERS/WWW-YouTube-2006.0615/youtube/images/ERMpowered.gif
 
 E<gt> ~/youtube/images/ERMpowered.gif
 
@@ -245,7 +245,7 @@ B<$ mkdir> ~/youtube/tag ## tag application directory
 
 B<$ GET>
 
-http://search.cpan.org/src/ERMEYERS/WWW-YouTube-2006.0609/youtube/tag/tag.plx
+http://search.cpan.org/src/ERMEYERS/WWW-YouTube-2006.0615/youtube/tag/tag.plx
 
 E<gt> ~/youtube/tag/tag.plx
 
@@ -273,7 +273,7 @@ B<# mkdir> /var/www/html/images ## web application images directory
 
 B<# GET>
 
-http://search.cpan.org/src/ERMEYERS/WWW-YouTube-2006.0609/youtube/images/ERMpowered.gif
+http://search.cpan.org/src/ERMEYERS/WWW-YouTube-2006.0615/youtube/images/ERMpowered.gif
 
 E<gt> /var/www/html/images/ERMpowered.gif
 
@@ -285,7 +285,7 @@ B<# mkdir> /var/www/cgi-bin/youtube/tag
 
 B<# GET>
 
-http://search.cpan.org/src/ERMEYERS/WWW-YouTube-2006.0609/youtube/tag/mozilla_tag.php
+http://search.cpan.org/src/ERMEYERS/WWW-YouTube-2006.0615/youtube/tag/mozilla_tag.php
 
 E<gt> /var/www/cgi-bin/youtube/tag/mozilla_tag.php
 
@@ -301,7 +301,7 @@ B<# ln> -s ~username/youtube /var/www/html/youtube
 
 B<$ GET>
 
-http://search.cpan.org/src/ERMEYERS/WWW-YouTube-2006.0609/youtube/tag/mozilla_tag_agent.sh
+http://search.cpan.org/src/ERMEYERS/WWW-YouTube-2006.0615/youtube/tag/mozilla_tag_agent.sh
 
 E<gt> ~/youtube/tag/mozilla_tag_agent.sh
 
@@ -397,7 +397,7 @@ B<# ln> -s ~username/youtube /var/www/html/youtube
 
 B<$ GET>
 
-http://search.cpan.org/src/ERMEYERS/WWW-YouTube-2006.0609/youtube/tag/apache_tag.php
+http://search.cpan.org/src/ERMEYERS/WWW-YouTube-2006.0615/youtube/tag/apache_tag.php
 
 E<gt> ~/youtube/tag/apache_tag.php
 

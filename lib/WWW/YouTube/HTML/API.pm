@@ -1,3 +1,4 @@
+##
 ## WWW::YouTube::HTML::API
 ##
 package WWW::YouTube::HTML::API;
@@ -10,7 +11,7 @@ use warnings;
 #my $VERSION="0.1";
 
 #For CVS , use following line
-our $VERSION=sprintf("%d.%04d", q$Revision: 2006.0609 $ =~ /(\d+)\.(\d+)/);
+our $VERSION=sprintf("%d.%04d", q$Revision: 2006.0615 $ =~ /(\d+)\.(\d+)/);
 
 BEGIN {
 
@@ -28,7 +29,9 @@ BEGIN {
 
 } ## end BEGIN
 
-require WWW::YouTube::Com; ## NOTE: I need WWW::YouTube::Com secrets
+#use lib ( $ENV{'HOME'} );
+#
+#require WWW::YouTube::Com; ## NOTE: I need WWW::YouTube::Com secrets
 
 require WWW::YouTube::XML::API; ## NOTE: HTML/XML crossover
 
@@ -53,6 +56,8 @@ require IO::File;
 require Encode;
 
 require FindBin;
+
+require File::Basename;
 
 __PACKAGE__ =~ m/^(WWW::[^:]+)::([^:]+)(::([^:]+)){0,1}$/g;
 
@@ -96,7 +101,10 @@ die( __PACKAGE__ ) if (
 WWW::YouTube::ML::API::create_opts_types( \%WWW::YouTube::HTML::API::opts_type_args );
 
 $WWW::YouTube::HTML::API::numeric_max_try = $WWW::YouTube::ML::API::numeric_max_try;
-$WWW::YouTube::HTML::API::string_dbm_dir = $WWW::YouTube::ML::API::string_dbm_dir.'/html';
+
+$WWW::YouTube::HTML::API::string_dbm_dir =
+   File::Basename::dirname( $WWW::YouTube::ML::API::string_dbm_dir ) . '/html';
+
 $WWW::YouTube::HTML::API::string_vlbt_want = $WWW::YouTube::ML::API::string_vlbt_want;
 
 WWW::YouTube::ML::API::register_all_opts( \%WWW::YouTube::HTML::API::opts_type_args );
@@ -123,26 +131,15 @@ push( @WWW::YouTube::HTML::API::EXPORT_OK,
 ## NOTE: Getopts hasn't set the options yet. (all flags = 0 right now)
 ##
 
+$WWW::YouTube::HTML::API::cookie_file = undef;
+
+$WWW::YouTube::HTML::API::cookies = undef;
+
+$WWW::YouTube::HTML::API::ua = undef;
+
+$WWW::YouTube::HTML::API::lwp_ua_agent = undef;
+
 ##debug## printf( "fb=%s, ur=%s\n", $FindBin::Bin, $WWW::YouTube::Com::user );
-
-$WWW::YouTube::HTML::API::cookie_file = $FindBin::Bin .
-##                                        "/lwpcookies_${WWW::YouTube::Com::user}.txt";
-                                        "/lwpcookies_ermeyers.txt";
-
-##debug##unlink( $WWW::YouTube::HTML::API::cookie_file );
-
-$WWW::YouTube::HTML::API::cookies =
-   HTTP::Cookies->new( 'file' => $WWW::YouTube::HTML::API::cookie_file,
-                       'autosave' => 1
-                     );
-
-$WWW::YouTube::HTML::API::ua = LWP::UserAgent->new(
-                             'cookie_jar' => $WWW::YouTube::HTML::API::cookies,
-                             'protocols_allowed'   => [ 'http' ],
-                             'protocols_forbidden' => [ 'https', 'ftp', 'mailto' ],
-                                             );
-
-$WWW::YouTube::HTML::API::lwp_ua_agent = $WWW::YouTube::HTML::API::ua->agent();
 
 $WWW::YouTube::HTML::API::request = undef;
 
@@ -160,80 +157,101 @@ $WWW::YouTube::HTML::API::tree = $WWW::YouTube::HTML::API::tree->delete(); ## af
 
 %WWW::YouTube::HTML::API::vlmr = (); ## youtube.videos.list_most_recent
 
-## "/browse?s=mr&f=b&page=15&t=t"
-## class="moduleFeaturedTitle"><a href="http://www.youtube.com/watch?v=%s&"
-
-if ( ! -f $WWW::YouTube::HTML::API::cookie_file )
+##
+##
+##
+sub get_started
 {
-   ##debug##   print( "I'm looking for cookies: [".$WWW::YouTube::HTML::API::cookie_file."]\n" );
+   ##debug## print "getting started with login\n";
 
-   my $ua_info = 'sprintf( "WWW::YouTube::HTML::API login failed: %s \$itry=%dof%d\n",
-                           $result->status_line(), $itry-1, $max_try
-                         )';
+   $WWW::YouTube::HTML::API::cookie_file = File::Spec->catfile( $FindBin::Bin,
+                                                'lwpcookies_' . $WWW::YouTube::Com::user . '.txt'
+                                                              );
 
-   my $request_uri = "$WWW::YouTube::HTML::API::url/login";
+   ##debug## unlink( $WWW::YouTube::HTML::API::cookie_file );
 
-   my %request_form =
-   (
-      'current_form' => 'loginForm',
-      'username' => $WWW::YouTube::Com::user,
-      'password' => $WWW::YouTube::Com::pass,
-      'action_login' => 'Log In',
-   );
+   $WWW::YouTube::HTML::API::cookies =
+      HTTP::Cookies->new( 'file' => $WWW::YouTube::HTML::API::cookie_file,
+                          'autosave' => 1
+                        );
 
-   #<form name="logoutForm" method="post" action="/index">
-   #<input type="hidden" name="action_logout" value="1">
-   #</form>
+   $WWW::YouTube::HTML::API::ua = LWP::UserAgent->new(
+                                'cookie_jar' => $WWW::YouTube::HTML::API::cookies,
+                                'protocols_allowed'   => [ 'http' ],
+                                'protocols_forbidden' => [ 'https', 'ftp', 'mailto' ],
+                                                     );
 
-   my $request = HTTP::Request::Common::POST( $request_uri, \%request_form );
+   $WWW::YouTube::HTML::API::lwp_ua_agent = $WWW::YouTube::HTML::API::ua->agent();
 
-   my $result = undef;
-
-   my ( $itry, $max_try ) = ( 1, 5 ); ## how many retries exactly?
-
-   ##debug##   my $save_agent = $WWW::YouTube::HTML::API::ua->agent('Mozilla/5.0');
-
-   push( @{ $WWW::YouTube::HTML::API::ua->requests_redirectable }, 'POST' ); ## "HTTP 303 See Other"
-
-   while ( $itry++ <= $max_try )
+   if ( ! -f $WWW::YouTube::HTML::API::cookie_file )
    {
-      ##debug##      printf( STDERR "ua makes login request\n%s\n", $request->as_string() );
+      ##debug##   print( "I'm looking for cookies: [".$WWW::YouTube::HTML::API::cookie_file."]\n" );
 
-      $result = $WWW::YouTube::HTML::API::ua->get( $request_uri );
+      my $ua_info = 'sprintf( "WWW::YouTube::HTML::API login failed: %s \$itry=%dof%d\n",
+                              $result->status_line(), $itry-1, $max_try
+                            )';
 
-      sleep 5; ## I'm, like, a human?
+      my $request_uri = "$WWW::YouTube::HTML::API::url/login";
 
-      ##debug##print "something\n" if ( $result->is_error() );
+      my %request_form =
+      (
+         'current_form' => 'loginForm',
+         'username' => $WWW::YouTube::Com::user,
+         'password' => $WWW::YouTube::Com::pass,
+         'action_login' => 'Log In',
+      );
 
-      $result = $WWW::YouTube::HTML::API::ua->request( $request );
-      #$result = $WWW::YouTube::HTML::API::ua->post( $request_uri, $request_form );
+      my $request = HTTP::Request::Common::POST( $request_uri, \%request_form );
 
-      ##debug##print "something else\n" if ( $result->is_error() );
+      my $result = undef;
 
-      last if ( $result->is_success() );
+      my ( $itry, $max_try ) = ( 1, 5 ); ## how many retries exactly?
 
-      print( STDERR eval( $ua_info ) ) if ( $itry > $max_try );
+      ##debug##   my $save_agent = $WWW::YouTube::HTML::API::ua->agent('Mozilla/5.0');
 
-   } ## end while
+      push( @{ $WWW::YouTube::HTML::API::ua->requests_redirectable }, 'POST' ); ## "HTTP 303 See Other"
 
-   ##debug##   $save_agent = $WWW::YouTube::HTML::API::ua->agent($save_agent);
+      while ( $itry++ <= $max_try )
+      {
+         ##debug##      printf( STDERR "ua makes login request\n%s\n", $request->as_string() );
 
-   pop( @{ $WWW::YouTube::HTML::API::ua->requests_redirectable } );
+         $result = $WWW::YouTube::HTML::API::ua->get( $request_uri );
 
-   ##
-   ## Simulating the Frontier::Client debug output style of XML::API::ua
-   ##
-   if ( $WWW::YouTube::HTML::API::flag_ua_dmp )
-   {
-      printf( STDERR "---- request ----\n%s\n", $request->as_string() );
+         sleep 5; ## I'm, like, a human?
 
-      printf( STDERR "---- result  ----\n%s\n", $result->as_string() );
+         ##debug##print "something\n" if ( $result->is_error() );
+
+         $result = $WWW::YouTube::HTML::API::ua->request( $request );
+         #$result = $WWW::YouTube::HTML::API::ua->post( $request_uri, $request_form );
+
+         ##debug##print "something else\n" if ( $result->is_error() );
+
+         last if ( $result->is_success() );
+
+         print( STDERR eval( $ua_info ) ) if ( $itry > $max_try );
+
+      } ## end while
+
+      ##debug##   $save_agent = $WWW::YouTube::HTML::API::ua->agent($save_agent);
+
+      pop( @{ $WWW::YouTube::HTML::API::ua->requests_redirectable } );
+
+      ##
+      ## Simulating the Frontier::Client debug output style of XML::API::ua
+      ##
+      if ( $WWW::YouTube::HTML::API::flag_ua_dmp )
+      {
+         printf( STDERR "---- request ----\n%s\n", $request->as_string() );
+
+         printf( STDERR "---- result  ----\n%s\n", $result->as_string() );
+
+      } ## end if
+
+      ##debug##   printf( STDERR "ua got bad login result\n%s\n", '' ) if ( $result->is_error() );
 
    } ## end if
 
-   ##debug##   printf( STDERR "ua got bad login result\n%s\n", '' ) if ( $result->is_error() );
-
-} ## end if
+} ## end sub get_started
 
 ##
 ## WWW::YouTube::HTML::API::show_all_opts
@@ -451,6 +469,8 @@ sub WWW::YouTube::HTML::API::ua_request_utf8
 
    die( "ua_request_utf8 method error\n" ) if ( $request->method() ne 'GET' );
 
+   get_started() if ( ! defined( $WWW::YouTube::HTML::API::ua ) );
+
    while ( $itry++ <= $max_try )
    {
       ##debug##      print( STDERR "ua_request_utf8 makes request\n" );
@@ -561,6 +581,19 @@ sub WWW::YouTube::HTML::API::ua_request_utf8
 } ## end sub WWW::YouTube::HTML::API::ua_request_utf8
 
 ##
+## WWW::YouTube::HTML::API::mirror
+##
+sub mirror
+{
+   my ( $uri, $localfile ) = @_;
+
+   get_started() if ( ! defined( $WWW::YouTube::HTML::API::ua ) );
+
+   $WWW::YouTube::HTML::API::ua->mirror( $uri, $localfile );
+
+} ## end sub mirror
+
+##
 ## WWW::YouTube::HTML::API::ua_request
 ##
 ## returns a parse $tree and the $result (delete your $tree when you're done with it!)
@@ -578,6 +611,8 @@ sub WWW::YouTube::HTML::API::ua_request
                          )';
 
    my ( $itry, $max_try ) = ( 1, 5 ); ## how many retries exactly?
+
+   get_started() if ( ! defined( $WWW::YouTube::HTML::API::ua ) );
 
    while ( $itry++ <= $max_try )
    {
@@ -654,13 +689,28 @@ WWW::YouTube::HTML::API - How to Interface with YouTube using HTTP Protocol, CGI
 
 =head1 SYNOPSIS
 
- Options;
-
-   --html_api_*
+Options (--html_api_* options);
 
 =head1 OPTIONS
 
---html_api_*
+--html_api_* options:
+
+opts_type_flag:
+
+   --html_api_ua_dmp
+   --html_api_request_dmp
+   --html_api_result_dmp
+   --html_api_tree_dmp
+   --html_api_video_dmp
+
+opts_type_numeric:
+
+   --html_api_max_try=number
+
+opts_type_string:
+
+   --html_api_dbm_dir=string
+   --html_api_vlbt_want=string
 
 =head1 DESCRIPTION
 

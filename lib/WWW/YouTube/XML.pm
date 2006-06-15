@@ -1,3 +1,4 @@
+##
 ## WWW::YouTube::XML
 ##
 package WWW::YouTube::XML;
@@ -10,7 +11,7 @@ use warnings;
 #my $VERSION="0.1";
 
 #For CVS , use following line
-our $VERSION=sprintf("%d.%04d", q$Revision: 2006.0609 $ =~ /(\d+)\.(\d+)/);
+our $VERSION=sprintf("%d.%04d", q$Revision: 2006.0615 $ =~ /(\d+)\.(\d+)/);
 
 BEGIN {
 
@@ -251,7 +252,39 @@ sub WWW::YouTube::XML::vlbt  ## NOTE: changing this to collect data for xml dump
 
    my $ihave = 'video_list';
 
-   my $curr_page = $h->{'first_page'};
+   my $xml_curr_page = $h->{'first_page'}; ## first call
+
+   my $xml_full_need = ( $h->{'last_page'} - $h->{'first_page'} + 1 ) * $h->{'per_page'}; ## to meet need
+
+   my $xml_per_page = $h->{'per_page'}; ## items per call
+
+   my $xml_last_page = $h->{'last_page'}; ## last call
+
+
+   ##
+   ## Trying to do the math for more efficient XML-RPC calls
+   ##
+
+#   my $xml_curr_page = $h->{'first_page'}; ## first call
+
+#   my $xml_full_need = ( $h->{'last_page'} - $h->{'first_page'} + 1 ) * $h->{'per_page'}; ## to meet need
+
+#   my $xml_per_page = $xml_full_need % 101; ## items per call
+
+#   my $xml_last_page = int( 0.5 + ( $xml_full_need / $xml_per_page ) ); ## last call
+
+   ##debug##   print "WWW::YouTube::XML getting xml_curr_page=$xml_curr_page\n";
+
+   ##debug##   print "WWW::YouTube::XML getting xml_full_need=$xml_full_need\n";
+
+   ##debug##   print "WWW::YouTube::XML getting xml_per_page=$xml_per_page\n";
+
+   ##debug##   print "WWW::YouTube::XML getting xml_last_page=$xml_last_page\n";
+
+
+   ##
+   ## Okay, here we go
+   ##
 
    my $item_cnt = 0;
 
@@ -265,13 +298,15 @@ sub WWW::YouTube::XML::vlbt  ## NOTE: changing this to collect data for xml dump
 
    my $try = 1; ## reset
 
+   ##debug##   print "WWW::YouTube::XML getting page=$xml_curr_page\n";
+
    while ( $try++ <= $WWW::YouTube::XML::API::numeric_max_try )
    {
       $vlbt = $WWW::YouTube::XML::API::action{$iam}->( { 'request' =>
                                                      {
                                                         'tag' => $h->{$ihave}->{'tag'},
-                                                        'per_page' => $h->{'per_page'},
-                                                        'page' => $curr_page,
+                                                        'per_page' => $xml_per_page,
+                                                        'page' => $xml_curr_page,
                                                      }
                                                  } );
 
@@ -297,15 +332,15 @@ sub WWW::YouTube::XML::vlbt  ## NOTE: changing this to collect data for xml dump
 
          $h->{$ihave}->{$iam}{$video_id_tag} = $video_id_tag_val;
 
-         $item_cnt++; ## means something came back in this
+         $item_cnt++; ## means something came back in this call
 
       } ## end while
 
       if ( $item_cnt > $item_cnt_saved )
       {
-         $curr_page++;
+         $xml_curr_page++;
 
-         goto next_vlbt if ( $curr_page <= $h->{'last_page'} );
+         goto next_vlbt if ( $xml_curr_page <= $xml_last_page );
 
       } ## end if
 
@@ -426,13 +461,23 @@ WWW::YouTube::XML - General Extensible Markup Language capabilities go in here.
 
 =head1 SYNOPSIS
 
- Options;
-
-   --xml_*
+Options (--xml_* options);
 
 =head1 OPTIONS
 
---xml_*
+--xml_* options:
+
+opts_type_flag:
+
+   --xml_*
+
+opts_type_numeric:
+
+   --xml_*=number
+
+opts_type_string:
+
+   --xml_*=string
 
 =head1 DESCRIPTION
 

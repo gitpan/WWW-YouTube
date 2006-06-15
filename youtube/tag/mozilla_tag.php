@@ -485,7 +485,7 @@ print '<td>'. "\n";
 
 print '<strong><em>First Page:</em></strong> <select NAME="1st">' . "\n";
 
-for ( $i = 1; $i <= 100; $i++ )
+for ( $i = 1; $i <= 1000; $i++ )
 {
    if ( $i == $vlbt_1st )
    {

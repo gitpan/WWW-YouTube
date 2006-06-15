@@ -1,3 +1,4 @@
+##
 ## WWW::YouTube::XML::API
 ##
 package WWW::YouTube::XML::API;
@@ -10,7 +11,7 @@ use warnings;
 #my $VERSION="0.1";
 
 #For CVS , use following line
-our $VERSION=sprintf("%d.%04d", q$Revision: 2006.0609 $ =~ /(\d+)\.(\d+)/);
+our $VERSION=sprintf("%d.%04d", q$Revision: 2006.0615 $ =~ /(\d+)\.(\d+)/);
 
 BEGIN {
 
@@ -40,6 +41,8 @@ require XML::Parser; ## XML::API::tree parser
 require DBI; require XML::Dumper; ##require SQL::Statement;
 
 require Data::Dumper; ## get rid of this
+
+require File::Basename;
 
 require IO::File;
 
@@ -91,7 +94,10 @@ die( __PACKAGE__ ) if (
 WWW::YouTube::ML::API::create_opts_types( \%WWW::YouTube::XML::API::opts_type_args );
 
 $WWW::YouTube::XML::API::numeric_max_try = $WWW::YouTube::ML::API::numeric_max_try;
-$WWW::YouTube::XML::API::string_dbm_dir = $WWW::YouTube::ML::API::string_dbm_dir.'/xml';
+
+$WWW::YouTube::XML::API::string_dbm_dir =
+   File::Basename::dirname( $WWW::YouTube::ML::API::string_dbm_dir ) . '/xml';
+
 $WWW::YouTube::XML::API::string_vlbt_want = $WWW::YouTube::ML::API::string_vlbt_want;
 ##debug##$WWW::YouTube::XML::API::numeric_max_try++;
 ##debug##printf( STDERR "WWW::YouTube::XML::API::numeric_max_try=%d\n", $WWW::YouTube::XML::API::numeric_max_try );
@@ -2604,17 +2610,32 @@ __END__ ## package WWW::YouTube::XML::API
 
 =head1 NAME
 
-WWW::YouTube::XML::API - How to Interface with YouTube using HTTP Protocol and XMLRPC API.
+WWW::YouTube::XML::API - How to Interface with YouTube using HTTP Protocol and XML-RPC API.
 
 =head1 SYNOPSIS
 
- Options;
-
-   --xml_api_*
+Options (--xml_api_* options);
 
 =head1 OPTIONS
 
---xml_api_*
+--xml_api_* options:
+
+opts_type_flag:
+
+   --xml_api_ua_dmp
+   --xml_api_request_dmp
+   --xml_api_result_dmp
+   --xml_api_tree_dmp
+   --xml_api_video_dmp
+
+opts_type_numeric:
+
+   --xml_api_max_try=number
+
+opts_type_string:
+
+   --xml_api_dbm_dir=string
+   --xml_api_vlbt_want=string
 
 =head1 DESCRIPTION
 
