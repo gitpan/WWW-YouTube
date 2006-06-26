@@ -9,7 +9,7 @@ use warnings;
 ##my $VERSION="0.1";
 
 #For CVS , use following line
-our $VERSION=sprintf("%d.%04d", q$Revision: 2006.0615 $ =~ /(\d+)\.(\d+)/);
+our $VERSION=sprintf("%d.%04d", q$Revision: 2006.0626 $ =~ /(\d+)\.(\d+)/);
 
 BEGIN {
 
@@ -92,7 +92,7 @@ B<$ mkdir> ~/youtube/video ## video application and data directory (We're not st
 
 B<$ GET>
 
-http://search.cpan.org/src/ERMEYERS/WWW-YouTube-2006.0615/youtube/video/video.plx
+http://search.cpan.org/src/ERMEYERS/WWW-YouTube-2006.0626/youtube/video/video.plx
 
 > ~/youtube/video/video.plx
 

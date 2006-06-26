@@ -9,7 +9,7 @@ use warnings;
 ##my $VERSION="0.1";
 
 #For CVS , use following line
-our $VERSION=sprintf("%d.%04d", q$Revision: 2006.0615 $ =~ /(\d+)\.(\d+)/);
+our $VERSION=sprintf("%d.%04d", q$Revision: 2006.0626 $ =~ /(\d+)\.(\d+)/);
 
 BEGIN {
 
@@ -177,31 +177,13 @@ Prints the manual page and exits.
 
 =over
 
-=item B<Matthew 3:12>, "His winnowing fork is in his hand, and he will clear his threshing floor, gathering his wheat into the barn and burning up the chaff with unquenchable fire." -- NIV
-
-------
-
-README: L<WWW::YouTube>
-
-------
-
 =item To protect I<children>.
 
-I'm a Father, and I developed this program to find and flag videos as I<inappropriate> material.
+I developed this program to find and flag videos as I<inappropriate> material.
+
+README at L<http://www.youtube.com/profile?user=ermeyers>.
 
 I run by B<youtube/tag/tag.plx> I<armed> to flag videos.
-
-B<P> : Pornography or Obscenity
-
-B<I> : Illegal Acts
-
-B<G> : Graphic Violence
-
-B<R> : Racially or Ethnically Offensive Content
-
-B<[S]> : Submit to YouTube
-
-I'd like your help with this protective flagging effort, on occasion.  Thanks.
 
 =item With regard to the colored Video I<Tag> and Video I<Author> labels displayed, corresponding to the Video's tags or the Author's username at YouTube:
 
@@ -211,7 +193,7 @@ I<Yellow> : Found, but your tag string matched in a Partial or a Fuzzy way.
 
 I<Red>    : no match found.
 
-I have tag display options for this:
+There are options for this:
 
 --ml_vlbt_want=[all|found_(tagged|author)|not_found_(tagged|author)] ## What's saved and displayed
 
@@ -219,7 +201,7 @@ I have tag display options for this:
 
 --html_api_vlbt_want=[all|found_(tagged|author)|not_found_(tagged|author)] ## What's displayed
 
-=item So now, your ready for my B<tag> application: ( B<vlbt> = youtube.videos.list_by_tag )
+=item So now, your ready for the B<tag> application: ( B<vlbt> = youtube.videos.list_by_tag )
 
 =back
 
@@ -235,7 +217,7 @@ B<$ mkdir> ~/youtube/images ## youtube application images directory
 
 B<$ GET>
 
-http://search.cpan.org/src/ERMEYERS/WWW-YouTube-2006.0615/youtube/images/ERMpowered.gif
+http://search.cpan.org/src/ERMEYERS/WWW-YouTube-2006.0626/youtube/images/ERMpowered.gif
 
 E<gt> ~/youtube/images/ERMpowered.gif
 
@@ -245,7 +227,7 @@ B<$ mkdir> ~/youtube/tag ## tag application directory
 
 B<$ GET>
 
-http://search.cpan.org/src/ERMEYERS/WWW-YouTube-2006.0615/youtube/tag/tag.plx
+http://search.cpan.org/src/ERMEYERS/WWW-YouTube-2006.0626/youtube/tag/tag.plx
 
 E<gt> ~/youtube/tag/tag.plx
 
@@ -259,11 +241,11 @@ B<$ chmod> +x ~/youtube/tag/tag.plx
 
 =item This Mozilla I<Firefox> setup is an EXPERIMENTAL setup:
 
-This is a prototype, a work in progress, so please be flexible for a while.
+This is a functional prototype, a work in progress, so please be flexible for a while.  Thanks.
 
 =item Mozilla browsers, Mozilla Firefox included, have a -remote option.
 
-I've created a I<mozilla_tag_agent.sh script> to utilize this capability to its fullest extent for this application.
+I've created a I<mozilla_tag_agent.sh script> to utilize Mozilla's remote capability.
 
 If you have a different but compatible Mozilla browser, than you're still ok, because there's a switch available for you to override the Mozilla browser setting to use your Mozilla browser program instead.  If something's wrong, then please email me to let me know what doesn't work for you.
 
@@ -273,7 +255,7 @@ B<# mkdir> /var/www/html/images ## web application images directory
 
 B<# GET>
 
-http://search.cpan.org/src/ERMEYERS/WWW-YouTube-2006.0615/youtube/images/ERMpowered.gif
+http://search.cpan.org/src/ERMEYERS/WWW-YouTube-2006.0626/youtube/images/ERMpowered.gif
 
 E<gt> /var/www/html/images/ERMpowered.gif
 
@@ -285,7 +267,7 @@ B<# mkdir> /var/www/cgi-bin/youtube/tag
 
 B<# GET>
 
-http://search.cpan.org/src/ERMEYERS/WWW-YouTube-2006.0615/youtube/tag/mozilla_tag.php
+http://search.cpan.org/src/ERMEYERS/WWW-YouTube-2006.0626/youtube/tag/mozilla_tag.php
 
 E<gt> /var/www/cgi-bin/youtube/tag/mozilla_tag.php
 
@@ -301,7 +283,7 @@ B<# ln> -s ~username/youtube /var/www/html/youtube
 
 B<$ GET>
 
-http://search.cpan.org/src/ERMEYERS/WWW-YouTube-2006.0615/youtube/tag/mozilla_tag_agent.sh
+http://search.cpan.org/src/ERMEYERS/WWW-YouTube-2006.0626/youtube/tag/mozilla_tag_agent.sh
 
 E<gt> ~/youtube/tag/mozilla_tag_agent.sh
 
@@ -319,11 +301,9 @@ B<$ ~/youtube/tag/tag.plx> --yt_canon_tag=very_nbsp_hot_nbsp_girl --yt_mozilla -
 
 =item You should see something come up, after a short period of time, like your favorite web browser with a 'very hot girl' exposing herself somewhere in it.
 
-Talk about motivating people, huh. ( :># )##
+=item The Mozilla tag agent script
 
-=item Is that it. Are we done now?
-
-Not yet.  Let's see what the I<mozilla_tag_agent.sh script> was created to do for you.
+Let's see what the I<mozilla_tag_agent.sh script> was created to do for you.
 
 =item If you don't have Mozilla Firefox, then you'll need to edit the mozilla_tag_agent.sh script to set it up for your Mozilla browser.
 
@@ -379,7 +359,7 @@ B<$ ~/youtube/tag/mozilla_tag_agent.sh>
 
 =item This I<Apache> setup is an EXPERIMENTAL setup (Considered a I<SECURITY RISK> by SELinux).
 
-=item There may come a user named I<apache> to play videos by 'tag' with you.
+=item So there may come a user named I<apache> to play videos by 'tag' with you.
 
 =item As your I<username>:
 
@@ -397,7 +377,7 @@ B<# ln> -s ~username/youtube /var/www/html/youtube
 
 B<$ GET>
 
-http://search.cpan.org/src/ERMEYERS/WWW-YouTube-2006.0615/youtube/tag/apache_tag.php
+http://search.cpan.org/src/ERMEYERS/WWW-YouTube-2006.0626/youtube/tag/apache_tag.php
 
 E<gt> ~/youtube/tag/apache_tag.php
 
@@ -407,7 +387,7 @@ B<$ GET> http://localhost/youtube/tag/tag.php ## DOES THIS WORK FOR YOU NOW?
 
 =item I<About my SELinux>:
 
-I currently have FC4 Linux, Apache 2.0, and I couldn't do perl, use CGI.pm or load mod_perl.so at all. ( #: >#(##
+I currently have FC4 Linux, Apache 2.0, and I couldn't use perl, or CGI.pm or load mod_perl.so at all.
 
 My SELinux didn't allow me to run perl CGI scripts under Apache's httpd.
 

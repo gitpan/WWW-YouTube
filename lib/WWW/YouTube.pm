@@ -15,7 +15,7 @@ require Date::Format;
 #my $VERSION="0.1";
 
 #For CVS , use following line
-our $VERSION = sprintf("%d.%04d", "Revision: 2006.0615" =~ /(\d+)\.(\d+)/);
+our $VERSION = sprintf("%d.%04d", "Revision: 2006.0626" =~ /(\d+)\.(\d+)/);
 
 BEGIN {
 
@@ -42,7 +42,7 @@ require File::Basename;
 
 __PACKAGE__ =~ m/^(WWW::[^:]+)((::([^:]+))(::([^:]+))){0,1}$/g;
 
-##debug##print( "UT! $1::$4::$6\n" );
+##debug##print( "YT! $1::$4::$6\n" );
 
 %WWW::YouTube::opts_type_args =
 (
@@ -246,7 +246,7 @@ opts_type_string:
 
 =head1 DESCRIPTION
 
-B<WWW::YouTube> is the I<Public> I<YouTube Development Interface> (YTDI).
+B<WWW::YouTube> is the I<Public> YouTube Development Interface (YTDI).
 
 B<L<WWW::YouTube::Com>> is your I<Private> YouTube Developer's Interface.
 
@@ -254,29 +254,15 @@ We need your private B<user, pass and dev_id> defined here.
 
 To use the YouTube Development Interface (YTDI) through your own YouTube Developer's Interface, you need to have a YouTube username and password, and you'll need to register with YouTube as a Developer in order to get a Developer ID for the YouTube Developer's API at L<http://www.youtube.com/dev>.
 
-By the way, you need to go directly to YouTube at L<http://www.youtube.com> to do your registering, and you must think up a really good excuse for your desire to become a registered YouTube Developer.
+WWW::YouTube: "Keep it FUN, CLEAN and REAL," -- "to protect children."
 
-DON'T use something like helping me to develop programs to protect the registered teenagers and the General Public, including children, from being exposed to too much adult content and other inappropriate material.  It might not work to well, since on 06/14/2006, YouTube BLACKLISTED me for cleaning up the "hot babes," "foot fettish" and "bondage tickling" videos I found on YouTube.
+I've been through the Lion's den over this very good visual-invention of mine, in the comp.lang.perl.modules news forum, but like Daniel did a very long time ago, I came out of the Lion's den completely unscathed, because the roaring lions, like John Bokma, had no teeth.  I know that most of you out there will be using WWW::YouTube to suit your own private video purposes, solving your own problems and satisfying your own needs, but there will be some of you out there who might also choose to help me to protect innocent children, developing teenagers and the general public from inappropriate adult content in the public domain, by occasionally using the youtube/tag/tag.plx application that will always be included as an integral part of this distribution.  Either way, for or against my central theme and the original purpose for the development of WWW::YouTube, this central tag application should always be analyzed as the current example of what can be engineered and developed for the public good, fully embracing the open-source philosophy, and fully respecting the First Amendment Rights of adults, while simply trying to protect innocent children from too many visual attacks from thoughtless individuals.  Opportunity knocks, because the technological door is being opened for all of us to explore what can be done.  The Good application has already won over the Bad application, because an instant success cannot be turned into something that is doomed to fail, John.
 
-README at L<http://www.youtube.com/profile?user=ermeyers>, if you can.  It has been 24 hours, and the YouTube Administrators still haven't told me why my account has been disabled.  YouTube, what is my "Terms of Use" offense to you?  I'll keep trying to get an answer, because as long as this guy L<http://www.youtube.com/watch?v=8uByGrzLLTs> or this girl L<http://www.youtube.com/watch?v=Bjtd9kmiyMI> are still YouTube "Gold Club" members, or the "Head" YouTube Administrators doing their daily "Self Worship" routine, things need to be corrected and all Children, Teenagers and the General Public, need to be protected continually with "Extreme Prejudice."
+The youtube/video/video.plx application, also provided with this distribution, runs a simple demo, and is intended to help you to get started.
 
-Luke 9:5, "If people do not welcome you, shake the dust off your feet when you leave their town, as a testimony against them." --NIV
+This is a functional prototype, a work in progress, so please be flexible for a while.  Thanks.
 
-Luke 10:11, "Even the dust of your town that sticks to our feet we wipe off against you. Yet be sure of this: The kingdom of God is near." --NIV
-
-Now, just because a public video on YouTube has been flagged as inappropriate material for the General Public, doesn't mean that a registered adult can't watch it.  Flagging keeps YouTube registered teenagers, and YouTube's unregistered General Public viewers, including children, from being able to view the contents of a public video identified as an inappropriate video, viewable by registered adults only, if they I<explicitly> choose to be viewing the public videos flagged as "inappropriate material," during their I<current> login session.
-
-You'll need to I<educate> yourself and I<experiment> with YouTube I<directly>, before going hog-wild with my WWW::YouTube applications, like I did, flagging videos.  "To protect children," that's my central theme and purpose for this B<EXPERIMENTAL> I<YouTube Development Interface> (YTDI) project, called B<WWW::YouTube>.
-
-What happens with the YTDI really depends on Who, What, When, Where and Which action it's activated.
-
-And Why, and How?  What I<actually> happens, Why or How it I<happened>, really matters in this world we live in, doesn't it?
-
-Matthew 3:12, "His winnowing fork is in his hand, and he will clear his threshing floor, gathering his wheat into the barn and burning up the chaff with unquenchable fire." -- NIV
-
-README AGAIN at L<http://www.youtube.com/profile?user=ermeyers>, if you can.
-
-WWW::YouTube: "Keep it FUN, CLEAN and REAL," -- "to protect children!"
+More to come, I promise.
 
 =head1 SEE ALSO
 
