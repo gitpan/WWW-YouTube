@@ -9,29 +9,23 @@ use warnings;
 ##my $VERSION="0.1";
 
 #For CVS , use following line
-our $VERSION=sprintf("%d.%04d", q$Revision: 2006.0626 $ =~ /(\d+)\.(\d+)/);
+our $VERSION=sprintf("%d.%04d", q$Revision: 2008.0606 $ =~ /(\d+)\.(\d+)/);
 
 BEGIN {
-
-   ##debug## push( @ARGV, '--user=RediRoc' );
 
    ##debug## push( @ARGV, '--xml_ua_dmp' );
    ##debug## push( @ARGV, '--xml_request_dmp' );
    ##debug## push( @ARGV, '--xml_result_dmp' );
-   ##debug## push( @ARGV, '--xml_tree_dmp' );
-   ##debug## push( @ARGV, '--xml_video_dmp' );
 
    ##debug## push( @ARGV, '--html_ua_dmp' );
    ##debug## push( @ARGV, '--html_request_dmp' );
    ##debug## push( @ARGV, '--html_result_dmp' );
-   ##debug## push( @ARGV, '--html_tree_dmp' );
-   ##debug## push( @ARGV, '--html_video_dmp' );
 
 } ## end BEGIN
 
 use lib ( "$ENV{'HOME'}" );
 
-use WWW::YouTube::Com;
+use WWW::YouTube;
 
 use Getopt::Long;
 
@@ -39,15 +33,11 @@ use Pod::Usage;
 
 my $man = 0;
 my $help = 0;
-my $user = 'ermeyers';## user to lookup
-
-##debug##%WWW::YouTube::opts = %WWW::YouTube::opts; ## dummy
 
 my %opts =
 (
    'man' => \$man,
    'help|?' => \$help,
-   'user=s' => \$user,
    %WWW::YouTube::opts,
 
 );
@@ -68,7 +58,7 @@ pod2usage( '-exitstatus' => 0, '-verbose' => 2 ) if ( $man );
 ##debug## WWW::YouTube::HTML::show_all_opts();
 ##debug## WWW::YouTube::HTML::API::show_all_opts();
 
-WWW::YouTube::XML::API::demo( { 'request' => { 'user' => $user } } );
+WWW::YouTube::XML::demo();
 
 END {
 
@@ -92,7 +82,7 @@ B<$ mkdir> ~/youtube/video ## video application and data directory (We're not st
 
 B<$ GET>
 
-http://search.cpan.org/src/ERMEYERS/WWW-YouTube-2006.0626/youtube/video/video.plx
+http://search.cpan.org/src/ERMEYERS/WWW-YouTube-2008.0606/youtube/video/video.plx
 
 > ~/youtube/video/video.plx
 

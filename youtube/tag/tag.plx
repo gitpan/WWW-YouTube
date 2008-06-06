@@ -9,7 +9,7 @@ use warnings;
 ##my $VERSION="0.1";
 
 #For CVS , use following line
-our $VERSION=sprintf("%d.%04d", q$Revision: 2006.0626 $ =~ /(\d+)\.(\d+)/);
+our $VERSION=sprintf("%d.%04d", q$Revision: 2008.0606 $ =~ /(\d+)\.(\d+)/);
 
 BEGIN {
 
@@ -33,7 +33,7 @@ BEGIN {
 
    ##debug## push( @ARGV, '--html_body_bgcolor=Cyan' );
 
-   ##debug## push( @ARGV, '--html_columns=5' );
+   ##debug## push( @ARGV, '--html_columns=3' );
 
    ##debug## push( @ARGV, '--html_watch_size=small' );
 
@@ -53,17 +53,20 @@ BEGIN {
 
    ##debug## push( @ARGV, '--ml_max_pages=1' );
 
-   ##debug## push( @ARGV, '--ml_per_page=10' );
+   ##debug## push( @ARGV, '--ml_per_page=3' );
 
    ##debug## push( @ARGV, '--ml_delay_sec=3' );
 
    ##debug####problem## push( @ARGV, '--canon_tag=what_nbsp_are_nbsp_you_nbsp_doing' );
 
+   ##debug##
+   push( @ARGV, '--yt_mozilla' );
+
 } ## end BEGIN
 
 use lib ( ( $ENV{'HOME'} eq '/' )? '/var/www' : $ENV{'HOME'} ); ## This also accomodates the Apache Setup
 
-use WWW::YouTube::Com;
+use WWW::YouTube;
 
 use Getopt::Long;
 
@@ -95,9 +98,7 @@ pod2usage( '-exitstatus' => 0, '-verbose' => 2 ) if ( $man );
 ##debug## WWW::YouTube::HTML::show_all_opts(); ##debug##exit;
 ##debug## WWW::YouTube::HTML::API::show_all_opts(); ##debug##exit;
 
-my $something_someday_maybe = undef;
-
-WWW::YouTube::vlbt( { '$0' => $0, 'tag' => $something_someday_maybe } ); ## tag (not used)
+WWW::YouTube::vlbt( { '$0' => $0 } );
 
 ##debug##WWW::YouTube::show_all_opts();
 
@@ -217,7 +218,7 @@ B<$ mkdir> ~/youtube/images ## youtube application images directory
 
 B<$ GET>
 
-http://search.cpan.org/src/ERMEYERS/WWW-YouTube-2006.0626/youtube/images/ERMpowered.gif
+http://search.cpan.org/src/ERMEYERS/WWW-YouTube-2008.0606/youtube/images/ERMpowered.gif
 
 E<gt> ~/youtube/images/ERMpowered.gif
 
@@ -227,7 +228,7 @@ B<$ mkdir> ~/youtube/tag ## tag application directory
 
 B<$ GET>
 
-http://search.cpan.org/src/ERMEYERS/WWW-YouTube-2006.0626/youtube/tag/tag.plx
+http://search.cpan.org/src/ERMEYERS/WWW-YouTube-2008.0606/youtube/tag/tag.plx
 
 E<gt> ~/youtube/tag/tag.plx
 
@@ -255,7 +256,7 @@ B<# mkdir> /var/www/html/images ## web application images directory
 
 B<# GET>
 
-http://search.cpan.org/src/ERMEYERS/WWW-YouTube-2006.0626/youtube/images/ERMpowered.gif
+http://search.cpan.org/src/ERMEYERS/WWW-YouTube-2008.0606/youtube/images/ERMpowered.gif
 
 E<gt> /var/www/html/images/ERMpowered.gif
 
@@ -267,7 +268,7 @@ B<# mkdir> /var/www/cgi-bin/youtube/tag
 
 B<# GET>
 
-http://search.cpan.org/src/ERMEYERS/WWW-YouTube-2006.0626/youtube/tag/mozilla_tag.php
+http://search.cpan.org/src/ERMEYERS/WWW-YouTube-2008.0606/youtube/tag/mozilla_tag.php
 
 E<gt> /var/www/cgi-bin/youtube/tag/mozilla_tag.php
 
@@ -283,7 +284,7 @@ B<# ln> -s ~username/youtube /var/www/html/youtube
 
 B<$ GET>
 
-http://search.cpan.org/src/ERMEYERS/WWW-YouTube-2006.0626/youtube/tag/mozilla_tag_agent.sh
+http://search.cpan.org/src/ERMEYERS/WWW-YouTube-2008.0606/youtube/tag/mozilla_tag_agent.sh
 
 E<gt> ~/youtube/tag/mozilla_tag_agent.sh
 
@@ -377,7 +378,7 @@ B<# ln> -s ~username/youtube /var/www/html/youtube
 
 B<$ GET>
 
-http://search.cpan.org/src/ERMEYERS/WWW-YouTube-2006.0626/youtube/tag/apache_tag.php
+http://search.cpan.org/src/ERMEYERS/WWW-YouTube-2008.0606/youtube/tag/apache_tag.php
 
 E<gt> ~/youtube/tag/apache_tag.php
 

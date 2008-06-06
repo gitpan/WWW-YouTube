@@ -11,14 +11,12 @@ require Config;
 
 require File::Spec;
 
-require Date::Format;
-
 my $param =
 {
    'NAME' => 'WWW-YouTube',
    'CPANID' => 'ERMEYERS',
-   'AUTHOR' => 'Eric R. Meyers <ermeyers@adelphia.net>',
-   'VERSION' => Date::Format::time2str( '%Y.%m%d', time() ),
+   'AUTHOR' => 'Eric R. Meyers <Eric.R.Meyers@gmail.com>',
+   'VERSION' => '2008.0606',
    'LICENSE' => 'perl',
    'ABSTRACT' => 'Interface to www.youtube.com',
 
@@ -34,7 +32,7 @@ my $build = Module::Build->new
    (
       'dist_name' => $param->{'NAME'},
       'dist_author' => $param->{'AUTHOR'},
-      'dist_version' => Date::Format::time2str( '%Y.%m%d', time() ),
+      'dist_version' => $param->{'VERSION'},
       'dist_version_from' => 'lib/WWW/YouTube.pm',
       'license' => $param->{'LICENSE'},
       'dist_abstract' => $param->{'ABSTRACT'},
@@ -172,7 +170,7 @@ sub gpg_me
       {
          print 'Importing public key into GnuPG keyring... ';
 
-         system( 'gpg --quiet --import', glob('public_keys/'.$param->{'CPANID'}.'*.pub') );
+         system( 'gpg --quiet --import' . glob('public_keys/'.$param->{'CPANID'}.'*.pub') );
 
          print "done.\n";
 

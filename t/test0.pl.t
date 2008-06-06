@@ -5,5 +5,5 @@ use Test::Simple tests => 1;
 
 ok( 1, 'success in progress' );
 
-exit ( 1 );
+exit ( 0 );
 

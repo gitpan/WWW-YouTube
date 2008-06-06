@@ -11,7 +11,7 @@ use warnings;
 ##my $VERSION="0.1";
 
 #For CVS , use following line
-our $VERSION=sprintf("%d.%04d", q$Revision: 2006.0626 $ =~ /(\d+)\.(\d+)/);
+our $VERSION=sprintf("%d.%04d", q$Revision: 2008.0606 $ =~ /(\d+)\.(\d+)/);
 
 BEGIN {
 
@@ -32,11 +32,9 @@ __PACKAGE__ =~ m/^(WWW::[^:]+)::([^:]+)(::([^:]+)){0,1}$/;
 
 ##debug## print( "API! $1::$2::$4\n" );
 
-##debug## exit;
+require FindBin;
 
 require File::Spec;
-
-require DBI; require XML::Dumper; ##require SQL::Statement;
 
 %WWW::YouTube::ML::API::opts =
 (
@@ -54,30 +52,19 @@ require DBI; require XML::Dumper; ##require SQL::Statement;
    'export_ok'      => [],
    'opts_type_flag' =>
    [
-      ##
-      ## @{$WWW::YouTube::ML::API::opts_type_args{'opts_type_flag'}},
-      ##
       'ua_dmp',
       'request_dmp',
       'result_dmp',
-      'tree_dmp',
-      'video_dmp',
-      ## Customizations follow this line ##
    ],
    'opts_type_numeric' =>
    [
-      'max_try'
-      ## Customizations follow this line ##
-
+      'max_try',
    ],
    'opts_type_string' =>
    [
-      'dbm_dir',
-      'vlbt_want',
-      ## Customizations follow this line ##
    ],
 
-); ## this does the work with opts and optype_flag(s)
+);
 
 die( __PACKAGE__ ) if (
      __PACKAGE__ ne join( '::', $WWW::YouTube::ML::API::opts_type_args{'ido'},
@@ -89,13 +76,6 @@ die( __PACKAGE__ ) if (
 ##debug####don't##WWW::YouTube::ML::API::create_opts_types( \%WWW::YouTube::ML::API::opts_type_args );
 
 $WWW::YouTube::ML::API::numeric_max_try = 5;
-$WWW::YouTube::ML::API::string_dbm_dir = File::Spec->catfile( $ENV{'HOME'},
-                                                              'youtube',
-                                                              'video',
-                                                              'dbm',
-                                                              'ml'
-                                                            );
-$WWW::YouTube::ML::API::string_vlbt_want = 'all';
 
 ##debug####don't##WWW::YouTube::ML::register_all_opts( \%WWW::YouTube::ML::API::opts_type_args );
 
@@ -156,7 +136,7 @@ sub WWW::YouTube::ML::API::create_opts_types
       ##
       $opts_type_args->{'opts_filename'}{$opt_type} =  File::Spec->catfile(
          $Bin_dir, lc( $opts_type_args->{'ido'} ) . '_' . $opt_ml_tag
-                                                                         ); ## path/youtube_ml_x
+                                                                          ); ## path/youtube_ml_x
 
       push( @{$opts_type_args->{'export_ok'}}, $opt_tag );
 
@@ -370,8 +350,6 @@ opts_type_flag:
    --ml_api_ua_dmp
    --ml_api_request_dmp
    --ml_api_result_dmp
-   --ml_api_tree_dmp
-   --ml_api_video_dmp
 
 opts_type_numeric:
 
@@ -379,8 +357,7 @@ opts_type_numeric:
 
 opts_type_string:
 
-   --ml_api_dbm_dir=string
-   --ml_api_vlbt_want=string
+   NONE
 
 =head1 DESCRIPTION
 
@@ -392,6 +369,6 @@ I<L<WWW::YouTube>> I<L<WWW::YouTube::ML>> I<L<WWW::YouTube::HTML::API>> I<L<WWW:
 
 =head1 AUTHOR
 
- Copyright (C) 2006 Eric R. Meyers E<lt>ermeyers@adelphia.netE<gt>
+ Copyright (C) 2008 Eric R. Meyers E<lt>Eric.R.Meyers@gmail.comE<gt>
 
 =cut

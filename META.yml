@@ -1,8 +1,8 @@
 ---
 name: WWW-YouTube
-version: 2006.0626
+version: 2008.0606
 author:
-  - 'Eric R. Meyers <ermeyers@adelphia.net>'
+  - 'Eric R. Meyers <Eric.R.Meyers@gmail.com>'
 abstract: Interface to www.youtube.com
 license: perl
 resources:
@@ -39,29 +39,29 @@ recommends:
 provides:
   WWW::YouTube:
     file: lib/WWW/YouTube.pm
-    version: 2006.0626
+    version: 2008.0606
   WWW::YouTube::Com:
     file: lib/WWW/YouTube/Com.pm
-    version: 2006.0626
+    version: 2008.0606
   WWW::YouTube::HTML:
     file: lib/WWW/YouTube/HTML.pm
-    version: 2006.0626
+    version: 2008.0606
   WWW::YouTube::HTML::API:
     file: lib/WWW/YouTube/HTML/API.pm
-    version: 2006.0626
+    version: 2008.0606
   WWW::YouTube::ML:
     file: lib/WWW/YouTube/ML.pm
-    version: 2006.0626
+    version: 2008.0606
   WWW::YouTube::ML::API:
     file: lib/WWW/YouTube/ML/API.pm
-    version: 2006.0626
+    version: 2008.0606
   WWW::YouTube::XML:
     file: lib/WWW/YouTube/XML.pm
-    version: 2006.0626
+    version: 2008.0606
   WWW::YouTube::XML::API:
     file: lib/WWW/YouTube/XML/API.pm
-    version: 2006.0626
-generated_by: Module::Build version 0.2801
+    version: 2008.0606
+generated_by: Module::Build version 0.2808
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.2.html
   version: 1.2

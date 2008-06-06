@@ -13,7 +13,7 @@ lib/WWW/YouTube/XML/API.pm
 MANIFEST			This list of files
 MANIFEST.SKIP
 META.yml
-public_keys/ERMEYERS2005.pub
+public_keys/ERMEYERS2008.pub
 README
 t/test0.pl.t
 t/use_me/test0.pl.t

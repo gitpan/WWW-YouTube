@@ -11,7 +11,7 @@ use warnings;
 #my $VERSION="0.1";
 
 #For CVS , use following line
-our $VERSION=sprintf("%d.%04d", q$Revision: 2006.0626 $ =~ /(\d+)\.(\d+)/);
+our $VERSION=sprintf("%d.%04d", q$Revision: 2008.0606 $ =~ /(\d+)\.(\d+)/);
 
 BEGIN {
 
@@ -31,11 +31,7 @@ require WWW::YouTube::HTML::API;
 
 require File::Spec;
 
-##require File::stat;
-
 require File::Basename;
-
-##require DBI; require XML::Dumper; ##require SQL::Statement;
 
 require Date::Format;
 
@@ -64,16 +60,9 @@ __PACKAGE__ =~ m/^(WWW::[^:]+)((::([^:]+)){1}(::([^:]+)){0,1}){0,1}$/g;
    'export_ok'      => [],
    'urls' =>
    {
-      ##
-      ## vlbt_opts
-      ##
-
    },
    'opts_type_flag' =>
    [
-      ##
-      ## vlbt_opts
-      ##
       'auto_play',
       'disarm',
       'thumbnail',
@@ -81,18 +70,13 @@ __PACKAGE__ =~ m/^(WWW::[^:]+)((::([^:]+)){1}(::([^:]+)){0,1}){0,1}$/g;
    ],
    'opts_type_numeric' =>
    [
-      ##
-      ## vlbt_opts
-      ##
       'columns',
       'rows',
 
    ],
    'opts_type_string' =>
    [
-      ##
-      ## vlbt_opts
-      ##
+      'vlbt_want',
       'body_bgcolor',
       'watch_size',
       'watch_size_window',
@@ -120,7 +104,9 @@ $WWW::YouTube::HTML::flag_thumbnail = 0; ## quick loading of thumbnail rather th
 $WWW::YouTube::HTML::string_body_bgcolor = 'Black';
 
 $WWW::YouTube::HTML::numeric_rows = 2; ## rows in table
-$WWW::YouTube::HTML::numeric_columns = 5; ## columns in table
+$WWW::YouTube::HTML::numeric_columns = 3; ## columns in table
+
+$WWW::YouTube::HTML::string_vlbt_want = 'all';
 
 $WWW::YouTube::HTML::string_watch_size = 'unconstrained'; ## object size
 
@@ -172,679 +158,19 @@ sub WWW::YouTube::HTML::show_all_opts
 } ## end sub WWW::YouTube::HTML::show_all_opts
 
 ##
-## WWW::YouTube::HTML::mirror_this_please
-##
-sub WWW::YouTube::HTML::mirror_this_please
-{
-   my $share_amongst_us = shift;
-
-   ##debug##   print STDERR "mirror_this_please\n";
-
-   die "lock exists\n" if ( -e $share_amongst_us->{'our_lock'} );
-
-   mkdir $share_amongst_us->{'our_dir'} if ( ! -e $share_amongst_us->{'our_dir'} );
-
-   my $fh_lock = IO::File->new( "+>$share_amongst_us->{'our_lock'}" ) ||
-   die "opening: $share_amongst_us->{'our_lock'} : $!\n";
-
-   $fh_lock->close(); ## unlink some other time, somewhere else far-far away
-
-   foreach my $uri ( sort keys %{$share_amongst_us->{'our_mirrors'}} )
-   {
-      my $localfile = $share_amongst_us->{'our_mirrors'}{$uri};
-
-      ##debug## print STDERR "mirroring to $localfile\n";
-
-      WWW::YouTube::HTML::API::mirror( $uri, $localfile );
-
-   } ## end while
-
-} ## end sub WWW::YouTube::HTML::mirror_this_please
-
-##
-## WWW::YouTube::HTML::mirror_most_recent
-##
-sub WWW::YouTube::HTML::mirror_most_recent
-{
-   my $h = shift;
-
-   ##debug##   print STDERR "mirror_most_recent\n";
-
-   my $we_dont_blow_up_occasionally = 0;
-
-   my $share_amongst_us = {};
-
-   $share_amongst_us->{'our_dir'} =
-            File::Spec->catfile( File::Basename::dirname( $FindBin::Bin ), 'mr_mirror', 'mr' );
-
-   $share_amongst_us->{'our_lock'} = File::Spec->catfile( $share_amongst_us->{'our_dir'}, '.lock' );
-
-   $share_amongst_us->{'our_first'} = 1; ## 1
-
-   $share_amongst_us->{'our_last'}  = 15; ## 15
-
-   $share_amongst_us->{'our_mirrors'} = {};
-
-   for ( my $i = $share_amongst_us->{'our_first'};
-            $i <= $share_amongst_us->{'our_last'}; $i++ )
-   {
-      $share_amongst_us->{'our_mirrors'}{
-                $WWW::YouTube::HTML::API::url.'/browse?s=mr&f=b&page='.$i.'&t=t'
-                                        } =
-                         File::Spec->catfile( $share_amongst_us->{'our_dir'},
-                                              sprintf( "/%02d.html", $i )
-                                            );
-
-   } ## end for
-
-   while ( $we_dont_blow_up_occasionally )
-   {
-      sleep 600 if ( -e $share_amongst_us->{'our_lock'} );
-
-   } ## end while
-
-   if ( ! -e $share_amongst_us->{'our_dir'} )
-   {
-         WWW::YouTube::HTML::mirror_this_please( $share_amongst_us )
-
-   } ## end if
-
-   if ( defined( $h->{'share_with_intel'} ) )
-   {
-      return( $share_amongst_us );
-
-   } ## end if
-
-} ##end sub WWW::YouTube::HTML::mirror_most_recent
-
-##
-## WWW::YouTube::HTML::mr_video_index
-##
-sub WWW::YouTube::HTML::mr_video_index
-{
-   my $h = shift;
-
-   ##debug##
-   print STDERR "mr_video_index\n";
-
-   ##
-   ## mrYYYYMMDDHHMMSS/index.html
-   ##
-
-   $h->{'index'} = 1;
-
-   my ( $mywrkdir ) = WWW::YouTube::HTML::mr_video_intel( $h );
-
-   if ( defined( $mywrkdir ) && -d $mywrkdir )
-   {
-      WWW::YouTube::HTML::mr_video_index_html( File::Spec->catfile( $mywrkdir, 'index.html' ), $h );
-
-   } ## end if
-
-} ##end sub WWW::YouTube::HTML::mr_video_index
-
-##
-## WWW::YouTube::HTML::mr_video_index_html
-##
-sub WWW::YouTube::HTML::mr_video_index_html
-{
-   my ( $myindx, $h ) = @_;
-
-   ##debug##
-   print STDERR "mr_video_index_html\n";
-
-   my $fh_myindx = IO::File->new();
-
-   $fh_myindx->open( $myindx, '+>:encoding(utf8)' ) ||
-   die "opening: $myindx : $!\n";
-
-   my $i = 0;
-
-   $fh_myindx->print( "<html><body><table border=1><tbody>\n" );
-
-   foreach my $video_id ( keys %{$h->{'video_list'}} )
-   {
-      $fh_myindx->print( '<tr height="25%">' ) if ( $i++ % $WWW::YouTube::HTML::numeric_columns == 0 );
-
-      $fh_myindx->print( '<td width="25%" valign="top">' );
-
-      if ( ! defined( $h->{'not_shown'}->{$video_id} ) )
-      {
-         $fh_myindx->print( '<img src="' . $h->{'video_list'}->{$video_id}{'thumbnail_url'} . '"><br>' );
-
-         $fh_myindx->print( WWW::YouTube::HTML::video_flagger_form( { 'video_id' => $video_id } ) );
-
-         $fh_myindx->print( '<a href="'.$h->{'video_list'}->{$video_id}{'watch_url'}.'">' .
-                            '<font size=-2>' . $h->{'video_list'}->{$video_id}{'title'} . '</font>' .
-                            '</a><br>'."\n"
-                          );
-
-      }
-      else
-      {
-         $fh_myindx->printf( "%s:<br>%s\n",
-                             $video_id,
-                             $h->{'see_errors'}{$h->{'not_shown'}{$video_id}}
-                           );
-
-      } ## end if
-
-      $fh_myindx->print( '</td>' );
-
-      $fh_myindx->print( '</tr>' ) if ( $i % $WWW::YouTube::HTML::numeric_columns == 0 );
-
-   } ## end foreach
-
-   $fh_myindx->print( "</tbody></table></body></html>\n" );
-
-   $fh_myindx->close();
-
-} ## end sub WWW::YouTube::HTML::mr_video_index_html
-
-##
-## WWW::YouTube::HTML::mr_video_intel
-##
-sub WWW::YouTube::HTML::mr_video_intel
-{
-   my $h = shift;
-
-   ##debug##
-   print STDERR "mr_video_intel\n";
-
-   my $we_dont_blow_up_occasionally = 0;
-
-   my $debug = ! $we_dont_blow_up_occasionally;
-
-   my $given_more_work_to_do = defined( $h->{'my_recursion'} );
-
-   my $found_more_work = 0;
-
-   my $share_amongst_us = {};
-
-   if ( ! $given_more_work_to_do )
-   {
-      $share_amongst_us = WWW::YouTube::HTML::mirror_most_recent( { 'share_with_intel' => 1 } );
-
-   }
-   else
-   {
-      $share_amongst_us = $h->{'my_recursion'};
-
-   } ## end if
-
-   my $mydir = File::Spec->catfile(
-               File::Basename::dirname(
-               File::Basename::dirname( $share_amongst_us->{'our_dir'} ) ), 'video'
-                                  );
-
-   ##debug##print "$mydir\n"; sleep 30;
-
-   my $mywrkdir = File::Spec->catfile( $mydir, 'mr' );
-
-   my $fh_mylock = IO::File->new();
-
-   my $mylock = File::Spec->catfile( $mywrkdir, '.lock' );
-
-   my $sqln = undef;
-
-   my $stln = undef;
-
-   if ( -e $mywrkdir && ! -e $mylock && ! $given_more_work_to_do )
-   {
-      $found_more_work++;
-
-      if ( defined( $h->{'index'} ) )
-      {
-         WWW::YouTube::HTML::mr_video_index( { 'my_recursion' => $share_amongst_us } );
-
-      }
-      else
-      {
-         WWW::YouTube::HTML::mr_video_intel( { 'my_recursion' => $share_amongst_us } );
-
-      } ## end if
-
-   }
-   else
-   {
-      while ( $we_dont_blow_up_occasionally )
-      {
-         last if ( ! -e $mywrkdir );
-
-         sleep 30;
-
-      } ## end while
-
-   } ## end if
-
-   if ( ! $given_more_work_to_do ) ## by parser #1, then im parser #1
-   {
-      unlink( $share_amongst_us->{'our_lock'} );
-
-      exit if ( -e $share_amongst_us->{'our_lock'}.'_no_parse' );
-
-      rename( $share_amongst_us->{'our_dir'}, $mywrkdir ) ||
-      die __PACKAGE__."renaming mr: $!\n";
-
-   } ## end if
-
-   $fh_mylock->open( "+>$mylock" ) ||
-   die __PACKAGE__." opening: $mylock : $!\n";
-
-   $fh_mylock->close(); ## unlinked toward the end
-
-   ##
-   ## MLDB_user
-   ##
-
-   my $MLDB_user = DBI->connect( 'dbi:DBM:mldbm=Storable' );
-
-   $MLDB_user->{'f_dir'} = $WWW::YouTube::ML::API::string_dbm_dir;
-
-   my $MLDB_user_sql = '';
-
-   if ( ! -f $WWW::YouTube::ML::API::string_dbm_dir.'/user.pag' )
-   {
-      $MLDB_user_sql =
-      'CREATE TABLE user '.
-      '('.
-         'user_id TEXT,'.
-         'type TEXT,'.
-         'first_name TEXT,'.
-         'last_name TEXT,'.
-         'about_me TEXT,'.
-         'age TEXT,'.
-         'video_upload_count TEXT,'.
-         'video_watch_count TEXT,'.
-         'homepage TEXT,'.
-         'hometown TEXT,'.
-         'gender TEXT,'.
-         'occupations TEXT,'.
-         'companies TEXT,'.
-         'city TEXT,'.
-         'country TEXT,'.
-         'books TEXT,'.
-         'hobbies TEXT,'.
-         'movies TEXT,'.
-         'relationship TEXT,'.
-         'friend_count TEXT,'.
-         'favorite_video_count TEXT,'.
-         'currently_on TEXT'.
-      ')' .";\n";
-
-      foreach $sqln ( split( /;*\n+/, $MLDB_user_sql ) )
-      {
-         ##debug## print $sqln ."\n";
-
-         $stln = $MLDB_user->prepare( $sqln );
-
-         $stln->execute();
-
-         ##debug## $stln->dump_results() if $stln->{'NUM_OF_FIELDS'};
-
-      } ## end foreach
-
-   } ## end if
-
-   #   $MLDB_user_sql =
-   #      'CREATE TABLE user ( user_id TEXT, type TEXT )' .";\n"
-   #      'INSERT INTO user VALUES (\'fbloggs\',\'trouble\')' .";\n".
-   #      'INSERT INTO user VALUES (\'spatel\',\'unknown\')' .";\n".
-   #      'INSERT INTO user VALUES (\'ermeyers\',\'cleared\')' .";\n".
-   #      'DELETE FROM user WHERE user_id = \'ermeyers\'' .";\n".
-   #      'UPDATE user SET type = \'trouble\' WHERE user_id = \'spatel\'' .";\n".
-   #      'SELECT * FROM user' .";\n";
-
-   ##
-   ## MLDB_video
-   ##
-
-   my $MLDB_video = DBI->connect('dbi:DBM:mldbm=Storable' );
-
-   my %MLDB_video_hash = ();
-
-   $MLDB_video->{'f_dir'} = $WWW::YouTube::ML::API::string_dbm_dir;
-
-   my $MLDB_video_sql = '';
-
-   if ( ! -f $WWW::YouTube::ML::API::string_dbm_dir.'/video.pag' )
-   {
-      $MLDB_video_sql = ##debug##'DROP TABLE video'. ";\n".
-         'CREATE TABLE video '.
-         '('.
-            'status TEXT,'.
-            'author TEXT,'.
-            'video_id TEXT,'.
-            'title TEXT,'.
-            'rating_avg TEXT,'.
-            'rating_count TEXT,'.
-            'tags TEXT,'.
-            'description TEXT,'.
-            'update_time TEXT,'.
-            'view_count TEXT,'.
-            'upload_time TEXT,'.
-            'length_seconds TEXT,'.
-            'recording_date TEXT,'.
-            'recording_location TEXT,'. ## /stub?
-            'recording_country TEXT,'. ## /stub?
-            'comment_count TEXT,'.
-            'comment_list TEXT,'. ## 'comment'*
-            'channel_list TEXT,'. ## 'channel'*
-            'thumbnail_url TEXT,'.
-            'watch_url TEXT'.
-         ')' .";\n";
-
-      foreach $sqln ( split( /;*\n+/, $MLDB_video_sql ) )
-      {
-         ##debug## print $sqln ."\n";
-
-         $stln = $MLDB_video->prepare( $sqln );
-
-         $stln->execute();
-
-         ##debug##$stln->dump_results() if $stln->{'NUM_OF_FIELDS'};
-
-      } ## end foreach
-
-   } ## end if
-
-   #   $MLDB_video_sql =
-   #      'CREATE TABLE video ( video_id TEXT, type TEXT )' .";\n"
-   #      'INSERT INTO video VALUES (\'fbloggs\',\'trouble\')' .";\n".
-   #      'INSERT INTO video VALUES (\'spatel\',\'unknown\')' .";\n".
-   #      'INSERT INTO video VALUES (\'ermeyers\',\'cleared\')' .";\n".
-   #      'DELETE FROM video WHERE video_id = \'ermeyers\'' .";\n".
-   #      'UPDATE video SET type = \'trouble\' WHERE video_id = \'spatel\'' .";\n".
-   #      'SELECT * FROM video' .";\n";
-
-   ##
-   ## Files
-   ##
-   my $fh_myhtml = IO::File->new(); my $myhtml = ''; ## local .html file
-
-   my $fh_mydump = IO::File->new(); my $mydump = ''; ## each .html has a .txt dump of tree
-
-   ## Optional Request Methods:
-   ##   $request = HTTP::Request->new( 'GET' => $WWW::YouTube::HTML::API::url );
-   ##   $request = HTTP::Request->new( 'POST' => $WWW::YouTube::HTML::API::url );
-   ##   $request = HTTP::Request::Common::POST( $uri, \%form );
-
-   my $html_request = HTTP::Request->new(); $html_request->method( 'GET' );
-
-   my $html_result = undef;
-
-   my $html_tree = undef;
-
-   my $html_elem_class = undef;
-
-   my $html_elem_href = undef;
-
-   my $html_elem_src = undef;
-
-   my $myxmldump = XML::Dumper->new();
-
-   my $myxml = File::Spec->catfile( $mywrkdir, 'video_list.xml.gz' );
-
-   $h->{'video_list'} = {};
-
-   my $video_id = '';
-
-   foreach $myhtml ( sort values( %{$share_amongst_us->{'our_mirrors'}} ) )
-   {
-      $html_tree = HTML::TreeBuilder->new(); ## must do this, then delete below
-
-      ##debug##printf( "%s => ? ##tree %s\n", $myhtml, ( defined( $html_tree ) )? 'exists':'problem' );
-      ##debug## $html_tree->delete(); next;
-
-      ##debug## print( STDERR "opening $myhtml\n" );
-
-      $myhtml = $mywrkdir.'/'.File::Basename::basename( $myhtml );
-
-      ##debug## print STDERR "$myhtml\n";
-
-      $fh_myhtml->open( $myhtml, '<:encoding(utf8)' ) ||
-      die( "opening: $myhtml: $!\n" );
-
-      $html_tree->parse_file( $fh_myhtml );
-
-      $fh_myhtml->close();
-
-      $html_tree->elementify();
-
-      foreach $html_elem_class ( $html_tree->look_down( 'class', 'img' ) ) ## was 'moduleFeaturedThumb'
-      {
-         ##debug## print "## thumbnail_url:\n";
-
-         foreach $html_elem_src ( $html_elem_class->look_down( 'src', qr/^http:/ ) )
-         {
-            $html_elem_src->attr( 'src' ) =~ m@/vi/([^/]+)/2[.]jpg$@;
-
-            $video_id = $1;
-
-            $h->{'video_list'}->{$video_id} = {};
-
-            $h->{'video_list'}->{$video_id}->{'thumbnail_url'} = $html_elem_src->attr( 'src' );
-
-            ##debug##
-            $h->{'video_list'}->{$video_id}->{'watch_url'} = $WWW::YouTube::HTML::API::url .'/watch?v=' . $video_id;
-
-            ##
-            ## record video in MLDB_video
-            ##
-
-            $MLDB_video_sql =
-            'INSERT INTO video VALUES ( '.
-               '\'TBD\', '.
-               '\'TBD\', '.
-               '\''.$video_id.'\', '.
-               '\'TBD\', '.
-               '\'TBD\', '.
-               '\'TBD\', '.
-               '\'TBD\', '.
-               '\'TBD\', '.
-               '\'TBD\', '.
-               '\'TBD\', '.
-               '\'TBD\', '.
-               '\'TBD\', '.
-               '\'TBD\', '.
-               '\'TBD\', '.
-               '\'TBD\', '.
-               '\'TBD\', '.
-               '\'TBD\', '.
-               '\'TBD\', '.
-               '\''.$h->{'video_list'}->{$video_id}{'thumbnail_url'}.'\', '.
-               '\''.$h->{'video_list'}->{$video_id}{'watch_url'}.'\' '.
-                                    ' )';
-
-            foreach $sqln ( split( /;*\n+/, $MLDB_video_sql ) )
-            {
-               ##debug## print $sqln ."\n";
-
-               $stln = $MLDB_video->prepare( $sqln );
-
-               $stln->execute();
-
-               ##debug## $stln->dump_results() if $stln->{'NUM_OF_FIELDS'};
-
-            } ## end foreach
-
-         } ## end foreach
-
-      } ## end foreach
-
-      foreach $html_elem_class ( $html_tree->look_down( 'class', 'title' )) ## was 'moduleFeaturedTitle'
-      {
-         ##debug## print "## watch_url and title for video:\n";
-
-         foreach $html_elem_href ( $html_elem_class->look_down( 'href', qr/^http:/ ) )
-         {
-            $html_elem_href->attr( 'href' ) =~ m@[?]v[=]([^&]+)[&]@;
-
-            $video_id = $1;
-
-            ##debug##
-            die( "video id\n" ) if ( ! defined( $video_id ) );
-
-            $h->{'video_list'}->{$video_id} = {};
-
-            $h->{'video_list'}->{$video_id}->{'watch_url'} = $html_elem_href->attr( 'href' );
-
-            ##debug##
-            die( "watch url\n" ) if ( ! defined( $h->{'video_list'}->{$video_id}->{'watch_url'} ) );
-
-            $h->{'video_list'}->{$video_id}->{'title'} = $html_elem_href->address( '.0' );
-
-            ##debug##
-            die( "video title\n" ) if ( ! defined( $h->{'video_list'}->{$video_id}->{'title'} ) );
-
-            ##debug##
-            print STDERR "info video: video_id=$video_id, watch=" . $h->{'video_list'}->{$video_id}->{'watch_url'}."\n";
-
-            ##
-            ## record video in MLDB_video
-            ##
-
-            $MLDB_video_sql =
-            'UPDATE video SET watch_url = \'' . $h->{'video_list'}->{$video_id}->{'watch_url'} . '\'' .
-            ' WHERE video_id = \'' . $video_id . '\'' .";\n".
-            'UPDATE video SET title = \'' . $h->{'video_list'}->{$video_id}->{'title'} . '\''.
-            ' WHERE video_id = \'' . $video_id . '\'' .";\n";
-
-            foreach $sqln ( split( /;*\n+/, $MLDB_video_sql ) )
-            {
-               ##debug##
-               print $sqln ."\n";
-
-#               $stln = $MLDB_video->prepare( $sqln );
-
-#               $stln->execute();
-
-               ##debug## $stln->dump_results() if $stln->{'NUM_OF_FIELDS'};
-
-            } ## end foreach
-
-            ##debug## printf( "%s\n", $video_id );
-
-         } ## end foreach
-
-      } ## end foreach
-
-      foreach $html_elem_class ( $html_tree->look_down( 'class', 'facets' ) ) ## was 'moduleFeaturedDetails'
-      {
-         foreach $html_elem_href ( $html_elem_class->look_down( 'href', qr@^/profile@ ) )
-         {
-            ##
-            ## record user in MLDB_user
-            ##
-
-            $MLDB_user_sql =
-               'INSERT INTO user VALUES ( '.
-               '\''.$html_elem_href->address('.0').'\', '.
-               '\'TBD\', '.
-               '\'TBD\', '.
-               '\'TBD\', '.
-               '\'TBD\', '.
-               '\'TBD\', '.
-               '\'TBD\', '.
-               '\'TBD\', '.
-               '\'TBD\', '.
-               '\'TBD\', '.
-               '\'TBD\', '.
-               '\'TBD\', '.
-               '\'TBD\', '.
-               '\'TBD\', '.
-               '\'TBD\', '.
-               '\'TBD\', '.
-               '\'TBD\', '.
-               '\'TBD\', '.
-               '\'TBD\', '.
-               '\'TBD\', '.
-               '\'TBD\', '.
-               '\'TBD\' '.
-                                      ' )'.";\n";
-
-            foreach $sqln ( split( /;*\n+/, $MLDB_user_sql ) )
-            {
-               ##debug## print $sqln ."\n";
-
-               $stln = $MLDB_user->prepare( $sqln );
-
-               $stln->execute();
-
-               ##debug## $stln->dump_results() if $stln->{'NUM_OF_FIELDS'};
-
-            } ## end foreach
-
-         } ## end foreach
-
-      } ## end foreach
-
-      $html_tree = $html_tree->delete(); ## done with that parse
-
-      ##debug## last;
-
-   } ## end while
-
-#=cut ## debug
-   ##
-   ## MLDB_user
-   ##
-   $MLDB_user_sql = 'SELECT * FROM user' .";\n";
-
-   foreach $sqln ( split( /;*\n+/, $MLDB_user_sql ) )
-   {
-      ##debug## print $sqln ."\n";
-
-      $stln = $MLDB_user->prepare( $sqln );
-
-      $stln->execute();
-
-      ##debug## $stln->dump_results() if $stln->{'NUM_OF_FIELDS'};
-
-   } ## end foreach
-#=cut
-
-#=cut ## debug
-   ##
-   ## MLDB_video
-   ##
-   $MLDB_video_sql ='SELECT * FROM video' .";\n";
-
-   foreach $sqln ( split( /;*\n+/, $MLDB_video_sql ) )
-   {
-      ##debug## print $sqln ."\n";
-
-      $stln = $MLDB_video->prepare( $sqln );
-
-      $stln->execute();
-
-      ##debug## $stln->dump_results() if $stln->{'NUM_OF_FIELDS'};
-
-   } ## end foreach
-#=cut
-
-   WWW::YouTube::HTML::video_intel( $h );
-
-   $MLDB_video->disconnect();
-
-   ##$myxmldump->dtd; ## In document
-
-   ##$myxmldump->pl2xml( \%MLDB_video_hash, $myxml );
-
-   $MLDB_user->disconnect();
-
-   my $mrwrkdir = $mywrkdir . Date::Format::time2str( "%Y%m%d%H%M%S", time );
-
-   unlink( $mylock );
-
-   rename( $mywrkdir, $mrwrkdir );
-
-   return ( $mrwrkdir );
-
-} ##end sub WWW::YouTube::HTML::mr_video_intel
-
-##
 ## WWW::YouTube::HTML::video_intel
+##
+my $mydir = File::Spec->catfile( File::Basename::dirname( $FindBin::Bin ), 'video' );
+
+foreach my $x ( qw(cached cerred showed vcried vetoed vflged vprned vprved) )
+{
+   if ( ! -d File::Spec->catfile( $mydir, "sm_video_$x" ) )
+   {
+      mkdir File::Spec->catfile( $mydir, "sm_video_$x" );
+
+   } ## end if
+
+} ## end foreach
 ##
 sub WWW::YouTube::HTML::video_intel
 {
@@ -858,8 +184,6 @@ sub WWW::YouTube::HTML::video_intel
 
    my $html_tree = undef;
 
-   my $mydir = File::Spec->catfile( File::Basename::dirname( $FindBin::Bin ), 'video' );
-
    ##
    ## Cache Maintenance
    ##
@@ -867,7 +191,7 @@ sub WWW::YouTube::HTML::video_intel
    opendir( DH, File::Spec->catfile( $mydir, 'sm_video_showed' ) ) ||
    die( 'opening '. File::Spec->catfile( $mydir, 'sm_video_showed' ) . ": $!\n" );
 
-   my @flist = map { "$mydir/sm_video_showed/$_" } grep { /[.]txt[.]gz$/ } readdir( DH );
+   my @flist = map { "$mydir/sm_video_showed/$_" } grep { /[.]txt$/ } readdir( DH );
 
    closedir( DH );
 
@@ -907,8 +231,6 @@ sub WWW::YouTube::HTML::video_intel
       my $myvprved = File::Spec->catfile( $mydir, 'sm_video_vprved', $video_id_canon . '.txt.gz' );
 
       my $mycached = $mycache;
-
-      my $MLDB_record = 1;
 
       if ( -e $mycerred ) ## C(lass) err(or)ed video
       {
@@ -971,30 +293,17 @@ sub WWW::YouTube::HTML::video_intel
 
       $html_request->uri( $WWW::YouTube::HTML::API::url . '/watch?v=' . $video_id );
 
-      if ( 1 )
-      {
-         ( $html_result ) = WWW::YouTube::HTML::API::ua_request_utf8( $html_request,
-                                                                      { 'no_tree' => 1 }
-                                                                    );
+      WWW::YouTube::HTML::API::get_started() if ( ! defined( $WWW::YouTube::HTML::API::ua ) );
 
-      }
-      else
-      {
-         ( $html_tree,
-           $html_result ) = WWW::YouTube::HTML::API::ua_request_utf8( $html_request );
+      my $parse_head = $WWW::YouTube::HTML::API::ua->parse_head();
 
-           $html_tree->delete();
+      $WWW::YouTube::HTML::API::ua->parse_head( 0 );
 
-      } ## end if
+      $html_result = WWW::YouTube::HTML::API::ua_request( $html_request, { 'no_tree' => 1 } );
+
+      $WWW::YouTube::HTML::API::ua->parse_head( $parse_head );
 
       $html_data = $html_result->as_string();
-
-      ##debug##my $mycached = File::Spec->catfile( $mydir, 'lg_video_cached', $video_id_canon . '.html.gz' );
-
-      #if ( $fh_zlib->open( $mycached, 'wb9' ) )
-      #{
-      #   $fh_zlib->print( $html_data ); ## see /video_cached_lg
-      #} ## end if
 
       undef( $fh_zlib );
 
@@ -1026,14 +335,14 @@ sub WWW::YouTube::HTML::video_intel
 
          $mycached = $myvflged;
 
-         $h->{'not_shown'}->{$video_id} = 'vflged' if ( $MLDB_record );
+         $h->{'not_shown'}->{$video_id} = 'vflged';
 
       }
       elsif ( $html_data =~ m/(class="error">([^<]*))/ )
       {
          @html_chunk = ( $1, $2, $2 );
 
-         $h->{'not_shown'}->{$video_id} = 'cerred' if ( $MLDB_record );
+         $h->{'not_shown'}->{$video_id} = 'cerred';
 
          if    ( $html_chunk[1] =~ m/This .+? (terms of use violation)[.]/ )
          {
@@ -1041,7 +350,7 @@ sub WWW::YouTube::HTML::video_intel
 
             $mycached = $myvetoed;
 
-            $h->{'not_shown'}->{$video_id} = 'vetoed' if ( $MLDB_record );
+            $h->{'not_shown'}->{$video_id} = 'vetoed';
 
          }
          elsif ( $html_chunk[1] =~ m/This .+? (copyright infringement)[.]/ )
@@ -1050,7 +359,7 @@ sub WWW::YouTube::HTML::video_intel
 
             $mycached = $myvcried;
 
-            $h->{'not_shown'}->{$video_id} = 'vcried' if ( $MLDB_record );
+            $h->{'not_shown'}->{$video_id} = 'vcried';
 
          }
          elsif ( $html_chunk[1] =~ m/This .+? (removed by the user)[.]/ )
@@ -1059,7 +368,7 @@ sub WWW::YouTube::HTML::video_intel
 
             $mycached = $myvprned;
 
-            $h->{'not_shown'}->{$video_id} = 'vprned' if ( $MLDB_record );
+            $h->{'not_shown'}->{$video_id} = 'vprned';
 
          }
          elsif ( $html_chunk[1] =~ m/This .+? (private video)[.]/ )
@@ -1068,7 +377,7 @@ sub WWW::YouTube::HTML::video_intel
 
             $mycached = $myvprved;
 
-            $h->{'not_shown'}->{$video_id} = 'vprved' if ( $MLDB_record );
+            $h->{'not_shown'}->{$video_id} = 'vprved';
 
          } ## end if
 
@@ -1090,7 +399,7 @@ sub WWW::YouTube::HTML::video_intel
 
          $fh_zlib->print( '<' . $html_chunk[2] . ">\n" ) if ( defined( $fh_zlib ) );
 
-         $h->{'see_errors'}->{$h->{'not_shown'}->{$video_id}} = $html_chunk[2] if ( $MLDB_record );
+         $h->{'see_errors'}->{$h->{'not_shown'}->{$video_id}} = $html_chunk[2];
 
       } ## end if
 
@@ -1174,36 +483,36 @@ sub WWW::YouTube::HTML::vlbt  ## NOTE: changing to collect data for xml dump, th
 
    my @video_id = keys %{$h->{$ihave}->{$iam}}; ## video IDs returned XML::vlbt
 
-   ##
-   ## Get rid of stuff we don't want to see (vlbt has no author, need vgd video_detail to get author)
-   ##
-   for( my $i = 0; $i <= $#video_id; $i++ )
-   {
-      if ( ! $h->{'found_author'}->{$video_id[$i]} ) ## && ( $h->{'video_list'}->{'just'} eq 'found_author' ) )
-      {
-         $h->{'video_id'} = $video_id[$i];
-
-         $h = WWW::YouTube::XML::vgd( $h );
-
-         ##debug##die ( "WWW::YouTube::XML::vgd call\n" ) if ( ! $h->{'video_detail'}{'ok'} );
-
-         delete( $h->{'video_id'} );
-
-         $h->{$ihave}->{$iam}{$video_id[$i]}->{'author'} = $h->{'video_detail'}->{'vgd'}{$video_id[$i]}->{'author'}
-
-      } ## end if
-
-      if ( (   $h->{'found_tagged'}->{$video_id[$i]} && ( $h->{'video_list'}->{'just'} eq 'not_found_tagged'   ) ) ||
-           ( ! $h->{'found_tagged'}->{$video_id[$i]} && ( $h->{'video_list'}->{'just'} eq 'found_tagged'       ) ) ||
-           (   $h->{'found_author'}->{$video_id[$i]} && ( $h->{'video_list'}->{'just'} eq 'not_found_author' ) ) ||
-           ( ! $h->{'found_author'}->{$video_id[$i]} && ( $h->{'video_list'}->{'just'} eq 'found_author'     ) )
-         )
-      {
-         splice( @video_id, $i--, 1 ); ## remove item at $i
-
-      } ## end if
-
-   } ## end foreach
+#   ##
+#   ## Get rid of stuff we don't want to see (vlbt has no author, need vgd video_detail to get author)
+#   ##
+#   for( my $i = 0; $i <= $#video_id; $i++ )
+#   {
+#      if ( ! $h->{'found_author'}->{$video_id[$i]} ) ## && ( $h->{'video_list'}->{'just'} eq 'found_author' ) )
+#      {
+#         $h->{'video_id'} = $video_id[$i];
+#
+#         $h = WWW::YouTube::XML::vgd( $h );
+#
+#         ##debug##die ( "WWW::YouTube::XML::vgd call\n" ) if ( ! $h->{'video_detail'}{'ok'} );
+#
+#         delete( $h->{'video_id'} );
+#
+#         $h->{$ihave}->{$iam}{$video_id[$i]}->{'author'} = $h->{'video_detail'}->{'vgd'}{$video_id[$i]}->{'author'}
+#
+#      } ## end if
+#
+#      if ( (   $h->{'found_tagged'}->{$video_id[$i]} && ( $h->{'video_list'}->{'just'} eq 'not_found_tagged'   ) ) ||
+#           ( ! $h->{'found_tagged'}->{$video_id[$i]} && ( $h->{'video_list'}->{'just'} eq 'found_tagged'       ) ) ||
+#           (   $h->{'found_author'}->{$video_id[$i]} && ( $h->{'video_list'}->{'just'} eq 'not_found_author' ) ) ||
+#           ( ! $h->{'found_author'}->{$video_id[$i]} && ( $h->{'video_list'}->{'just'} eq 'found_author'     ) )
+#         )
+#      {
+#         splice( @video_id, $i--, 1 ); ## remove item at $i
+#
+#      } ## end if
+#
+#   } ## end foreach
 
    my $mypage_cnt_saved = $h->{'last_page'} - $h->{'first_page'} + 1;
 
@@ -1412,6 +721,8 @@ sub WWW::YouTube::HTML::vlbt  ## NOTE: changing to collect data for xml dump, th
                $midframe .= WWW::YouTube::HTML::video_flagger_form( { 'video_id' => $video_id } );
 
             } ## end if
+
+            ##debug##print Data::Dumper::Dumper( $h->{'found_tagged'}->{$video_id} );
 
             my $color_tagged = $certainty{$h->{'found_tagged'}->{$video_id}};
 
@@ -1969,8 +1280,6 @@ WWW::YouTube::HTML - General Hyper-Text Markup Language capabilities go in here.
 
 =head1 SYNOPSIS
 
-Options (--html_* options);
-
 =head1 OPTIONS
 
 --html_* options:
@@ -1988,6 +1297,7 @@ opts_type_numeric:
 
 opts_type_string:
 
+   --html_vlbt_want=string
    --html_body_bgcolor=string
    --html_watch_size=string
    --html_watch_size_window=string
@@ -2002,6 +1312,6 @@ I<L<WWW::YouTube>> I<L<WWW::YouTube::ML>> I<L<WWW::YouTube::HTML::API>> I<L<WWW:
 
 =head1 AUTHOR
 
- Copyright (C) 2006 Eric R. Meyers E<lt>ermeyers@adelphia.netE<gt>
+ Copyright (C) 2008 Eric R. Meyers E<lt>Eric.R.Meyers@gmail.comE<gt>
 
 =cut

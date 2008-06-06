@@ -11,7 +11,7 @@ use warnings;
 #my $VERSION="0.1";
 
 #For CVS , use following line
-our $VERSION=sprintf("%d.%04d", q$Revision: 2006.0626 $ =~ /(\d+)\.(\d+)/);
+our $VERSION=sprintf("%d.%04d", q$Revision: 2008.0606 $ =~ /(\d+)\.(\d+)/);
 
 BEGIN {
 
@@ -21,17 +21,17 @@ BEGIN {
 
    @WWW::YouTube::Com::EXPORT = qw(); ## export required
 
-   @WWW::YouTube::Com::EXPORT_OK = qw(user pass dev_id); ## export ok on request
+   @WWW::YouTube::Com::EXPORT_OK = qw(); ## export ok on request
 
 } ## end BEGIN
-
-require WWW::YouTube;
 
 $WWW::YouTube::Com::user = <?php print "'$argv[1]'";?>; ## YouTube username
 
 $WWW::YouTube::Com::pass = <?php print "'$argv[2]'";?>; ## YouTube password
 
-$WWW::YouTube::Com::dev_id = <?php print "'$argv[3]'";?>; ## YouTube Developer ID
+$WWW::YouTube::Com::dev_key = <?php print "'$argv[3]'";?>; ## YouTube Developer key
+
+$WWW::YouTube::Com::clnt_id = <?php print "'$argv[4]'";?>; ## YouTube Client ID
 
 END {
 
@@ -46,23 +46,17 @@ WWW::YouTube::Com - Complete the setup of WWW::YouTube with needed personal para
 
 =head1 SYNOPSIS
 
--- Now about your future YouTube Development Interface projects:
-
 $ mkdir ~/WWW
 
 $ mkdir ~/WWW/YouTube
 
-/usr/bin/php $PERLLIB/WWW/YouTube/Com.pm B<user pass dev_id> > ~/WWW/YouTube/Com.pm
+/usr/bin/php $PERLLIB/WWW/YouTube/Com.pm B<user pass dev_key clnt_id> > ~/WWW/YouTube/Com.pm
 
 -- NOTE: php ...
 
- Options;
-
-   B<user pass dev_id>
-
 =head1 OPTIONS
 
- B<user pass dev_id> from registering with http://www.youtube.com as a YouTube Developer
+ B<user pass dev_key clnt_id>
 
 =head1 DESCRIPTION
 
@@ -76,6 +70,6 @@ I<L<WWW::YouTube>>
 
 =head1 AUTHOR
 
- Copyright (C) 2006 Eric R. Meyers E<lt>ermeyers@adelphia.netE<gt>
+ Copyright (C) 2008 Eric R. Meyers E<lt>Eric.R.Meyers@gmail.comE<gt>
 
 =cut

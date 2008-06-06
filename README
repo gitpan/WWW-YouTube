@@ -4,16 +4,13 @@ NAME
 SYNOPSIS
     use lib ( $ENV{'HOME'} );
 
-    use WWW::YouTube::Com; ## SEE DESCRIPTION
-
-    Options (--yt_* options);
+    use WWW::YouTube;
 
 OPTIONS
     --yt_* options:
 
     opts_type_flag:
 
-       --yt_apache
        --yt_mozilla
 
     opts_type_numeric:
@@ -30,53 +27,26 @@ DESCRIPTION
 
     WWW::YouTube::Com is your *Private* YouTube Developer's Interface.
 
-    We need your private user, pass and dev_id defined here.
+    We need your private user, pass, dev_key and clnt_id defined here.
 
     To use the YouTube Development Interface (YTDI) through your own YouTube
     Developer's Interface, you need to have a YouTube username and password,
     and you'll need to register with YouTube as a Developer in order to get
-    a Developer ID for the YouTube Developer's API at
-    http://www.youtube.com/dev.
+    a Developer key and Client ID for the YouTube DATA API at
+    http://code.google.com/apis/youtube.
 
-    WWW::YouTube: "Keep it FUN, CLEAN and REAL," -- "to protect children."
-
-    I've been through the Lion's den over this very good visual-invention of
-    mine, in the comp.lang.perl.modules news forum, but like Daniel did a
-    very long time ago, I came out of the Lion's den completely unscathed,
-    because the roaring lions, like John Bokma, had no teeth. I know that
-    most of you out there will be using WWW::YouTube to suit your own
-    private video purposes, solving your own problems and satisfying your
-    own needs, but there will be some of you out there who might also choose
-    to help me to protect innocent children, developing teenagers and the
-    general public from inappropriate adult content in the public domain, by
-    occasionally using the youtube/tag/tag.plx application that will always
-    be included as an integral part of this distribution. Either way, for or
-    against my central theme and the original purpose for the development of
-    WWW::YouTube, this central tag application should always be analyzed as
-    the current example of what can be engineered and developed for the
-    public good, fully embracing the open-source philosophy, and fully
-    respecting the First Amendment Rights of adults, while simply trying to
-    protect innocent children from too many visual attacks from thoughtless
-    individuals. Opportunity knocks, because the technological door is being
-    opened for all of us to explore what can be done. The Good application
-    has already won over the Bad application, because an instant success
-    cannot be turned into something that is doomed to fail, John.
+    WWW::YouTube: "Keep it FUN, CLEAN and REAL."
 
     The youtube/video/video.plx application, also provided with this
     distribution, runs a simple demo, and is intended to help you to get
     started.
-
-    This is a functional prototype, a work in progress, so please be
-    flexible for a while. Thanks.
-
-    More to come, I promise.
 
 SEE ALSO
     *WWW::YouTube::Com* *WWW::YouTube::ML* *WWW::YouTube::XML*
     *WWW::YouTube::HTML*
 
 AUTHOR
-    Copyright (C) 2006 Eric R. Meyers <ermeyers@adelphia.net>
+     Copyright (C) 2008 Eric R. Meyers E<lt>Eric.R.Meyers@gmail.comE<gt>
 
 LICENSE
     perl
