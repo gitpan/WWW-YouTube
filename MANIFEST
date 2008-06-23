@@ -4,7 +4,6 @@ COPYING
 INSTALL
 lib/WWW/YouTube.pm
 lib/WWW/YouTube/Authenticate.pm
-lib/WWW/YouTube/Com.pm
 lib/WWW/YouTube/GData.pm
 lib/WWW/YouTube/HTML.pm
 lib/WWW/YouTube/HTML/API.pm

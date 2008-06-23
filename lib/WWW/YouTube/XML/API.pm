@@ -11,7 +11,7 @@ use warnings;
 #my $VERSION="0.1";
 
 #For CVS , use following line
-our $VERSION=sprintf("%d.%04d", q$Revision: 2008.0610 $ =~ /(\d+)\.(\d+)/);
+our $VERSION=sprintf("%d.%04d", q$Revision: 2008.0623 $ =~ /(\d+)\.(\d+)/);
 
 BEGIN {
 
@@ -29,19 +29,19 @@ BEGIN {
 
 require WWW::YouTube::GData;
 
-require WWW::YouTube::Com; ## NOTE: I need secrets
-
 require WWW::YouTube::ML::API; ## NOTE: generic *ML
+
+require AppConfig::Std;
 
 require URI;
 
 require Data::Dumper;
 
+require File::Spec;
+
 require IO::File;
 
 require Date::Format;
-
-$WWW::YouTube::XML::API::url = 'http://gdata.youtube.com';
 
 __PACKAGE__ =~ m/^(WWW::[^:]+)::([^:]+)(::([^:]+)){0,1}$/;
 
@@ -110,18 +110,62 @@ push( @WWW::YouTube::XML::API::EXPORT_OK,
 ## NOTE: Getopts hasn't set the options yet. (all flags = 0 right now)
 ##
 
+$WWW::YouTube::XML::API::url = 'http://gdata.youtube.com';
+
+$WWW::YouTube::XML::API::config = AppConfig::Std->new();
+
+$WWW::YouTube::XML::API::config_file = File::Spec->catfile( $ENV{'HOME'}, '.www_youtube_rc' );
+
+$WWW::YouTube::XML::API::config->define( 'username', { EXPAND   => 0 } );
+$WWW::YouTube::XML::API::config->define( 'password', { EXPAND   => 0 } );
+$WWW::YouTube::XML::API::config->define( 'dev_key', { EXPAND   => 0 } );
+$WWW::YouTube::XML::API::config->define( 'clnt_id', { EXPAND   => 0 } );
+
+if ( ! -e $WWW::YouTube::XML::API::config_file )
+{
+   system( "echo 'username = ' > $WWW::YouTube::XML::API::config_file" );
+   system( "echo 'password = ' >> $WWW::YouTube::XML::API::config_file" );
+   system( "echo 'dev_key = ' >> $WWW::YouTube::XML::API::config_file" );
+   system( "echo 'clnt_id = ' >> $WWW::YouTube::XML::API::config_file" );
+
+} ## end if
+
+if ( -e $WWW::YouTube::XML::API::config_file &&
+     ( ( ( stat( $WWW::YouTube::XML::API::config_file ) )[2] & 36 ) != 0 )
+   )
+{
+   die "Your config file $WWW::YouTube::XML::API::config_file is readable by others!\n";
+
+} ## end if
+
+if ( -f $WWW::YouTube::XML::API::config_file )
+{
+   $WWW::YouTube::XML::API::config->file( $WWW::YouTube::XML::API::config_file )
+   || die "reading $WWW::YouTube::XML::API::config_file\n";
+
+} ## end if
+
+##debug##printf( "username='%s'\n", $WWW::YouTube::XML::API::config->username() );
+##debug##printf( "password='%s'\n", $WWW::YouTube::XML::API::config->password() );
+##debug##printf( "dev_key='%s'\n", $WWW::YouTube::XML::API::config->dev_key() );
+##debug##printf( "clnt_id='%s'\n", $WWW::YouTube::XML::API::config->clnt_id() );
+
 $WWW::YouTube::XML::API::gdi = WWW::YouTube::GData->new(
-                                                          'Email'   => $WWW::YouTube::Com::user,
-                                                          'Passwd'  => $WWW::YouTube::Com::pass,
+                                  'Email'  => $WWW::YouTube::XML::API::config->username(),
+                                  'Passwd' => $WWW::YouTube::XML::API::config->password(),
                                                        );
 
-$WWW::YouTube::XML::API::gdi->login();
+$WWW::YouTube::XML::API::gdi->login() || die "login failed: ".$WWW::YouTube::XML::API::gdi->errstr()."\n";
 
 $WWW::YouTube::XML::API::ua = $WWW::YouTube::XML::API::gdi->_ua();
 
-$WWW::YouTube::XML::API::ua->default_headers->push_header( 'X-GData-Client' => $WWW::YouTube::Com::clnt_id );
+$WWW::YouTube::XML::API::ua->default_headers->push_header( 'X-GData-Key' => 'key=' . $WWW::YouTube::XML::API::config->dev_key() );
 
-$WWW::YouTube::XML::API::ua->default_headers->push_header( 'X-GData-Key' => 'key=' . $WWW::YouTube::Com::dev_key );
+$WWW::YouTube::XML::API::ua->default_headers->push_header( 'X-GData-Client' => $WWW::YouTube::XML::API::config->clnt_id() );
+
+##debug##print $WWW::YouTube::XML::API::ua->default_header( 'Authorization' ) . "\n";
+##debug##print $WWW::YouTube::XML::API::ua->default_header( 'X-GData-Key' ) . "\n";
+##debug##print $WWW::YouTube::XML::API::ua->default_header( 'X-GData-Client' ) . "\n";
 
 END {
 

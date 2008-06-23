@@ -15,7 +15,7 @@ Version 0.01
 
 #our $VERSION = '0.01';
 #For CVS , use following line
-our $VERSION=sprintf("%d.%04d", q$Revision: 2008.0610 $ =~ /(\d+)\.(\d+)/);
+our $VERSION=sprintf("%d.%04d", q$Revision: 2008.0623 $ =~ /(\d+)\.(\d+)/);
 
 =head1 SYNOPSIS
 
@@ -68,13 +68,13 @@ sub accountType {
 
 }
 
-=head2 Email (required)
+=head2 Username (required)
 
-Email address used as the login for the requested service.
+Username used as the login for the requested service.
 
-=head2 Passwd (required)
+=head2 Password (required)
 
-Password used for the Email login for the requested service.
+Password used for the login for the requested service.
 
 =head2 service (required)
 
@@ -92,7 +92,7 @@ Currently known codes are as follows:
   YouTube data API	        youtube
   Default Service               youtube
 
-Defaults to B<xapi>.
+Defaults to B<youtube>.
 
 =cut
 
@@ -217,12 +217,11 @@ L<http://code.google.com/apis/accounts/AuthForInstalledApps.html#Errors>.
 
   );
 
-  sub _error_code { return exists $codes{ $_[1] } ? $codes{ $_[1] } : $codes{ 'Unknown' } }
+  sub _error_code { return exists $codes{ $_[0] } ? $codes{ $_[0] } : $codes{ 'Unknown' } }
 
   sub _codes { %codes } # This is for testing
 
 }
-
 
 =head1 AUTHOR
 

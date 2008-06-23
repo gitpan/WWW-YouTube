@@ -11,7 +11,7 @@ use warnings;
 #my $VERSION="0.1";
 
 #For CVS , use following line
-our $VERSION = sprintf("%d.%04d", "Revision: 2008.0610" =~ /(\d+)\.(\d+)/);
+our $VERSION = sprintf("%d.%04d", "Revision: 2008.0623" =~ /(\d+)\.(\d+)/);
 
 BEGIN {
 

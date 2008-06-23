@@ -15,7 +15,7 @@ Version 0.01
 
 #our $VERSION = '0.01';
 #For CVS , use following line
-our $VERSION=sprintf("%d.%04d", q$Revision: 2008.0610 $ =~ /(\d+)\.(\d+)/);
+our $VERSION=sprintf("%d.%04d", q$Revision: 2008.0623 $ =~ /(\d+)\.(\d+)/);
 
 =head1 SYNOPSIS
 
@@ -71,21 +71,6 @@ sub new {
 
 }
 
-=head2 get
-
-=head2 post
-
-=head2 put
-
-=head2 delete
-
-=cut
-
-sub GET { }
-sub POST { }
-sub PUT { }
-sub DELETE { }
-
 =head1 PRIVATE FUNCTIONS
 
 =head2 _ua
@@ -104,7 +89,7 @@ sub _ua {
 
   unless ( $ua = $self->SUPER::get( '_ua' ) ) {
 
-    $ua = LWP::UserAgent->new;
+    $ua = LWP::UserAgent->new();
 
     $self->SUPER::set( '_ua', $ua );
 
@@ -128,7 +113,7 @@ Eric R. Meyers, C<< <Eric.R.Meyers@gmail.com> >>
 
 Please report any bugs or feature requests to
 C<bug-net-google-gdata at rt.cpan.org>, or through the web interface at
-L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=WWW-YouTube-GData>.
+L<htp://rt.cpan.org/NoAuth/ReportBug.html?Queue=WWW-YouTube-GData>.
 I will be notified, and then you'll automatically be notified of progress on
 your bug as I make changes.
 
