@@ -16,7 +16,7 @@ my $param =
    'NAME' => 'WWW-YouTube',
    'CPANID' => 'ERMEYERS',
    'AUTHOR' => 'Eric R. Meyers <Eric.R.Meyers@gmail.com>',
-   'VERSION' => '2008.0623',
+   'VERSION' => '2008.0728',
    'LICENSE' => 'perl',
    'ABSTRACT' => 'Interface to www.youtube.com',
 

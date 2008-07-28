@@ -15,7 +15,7 @@ Version 0.01
 
 #our $VERSION = '0.01';
 #For CVS , use following line
-our $VERSION=sprintf("%d.%04d", q$Revision: 2008.0623 $ =~ /(\d+)\.(\d+)/);
+our $VERSION=sprintf("%d.%04d", q$Revision: 2008.0728 $ =~ /(\d+)\.(\d+)/);
 
 =head1 SYNOPSIS
 

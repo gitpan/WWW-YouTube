@@ -11,7 +11,7 @@ use warnings;
 #my $VERSION="0.1";
 
 #For CVS , use following line
-our $VERSION=sprintf("%d.%04d", q$Revision: 2008.0623 $ =~ /(\d+)\.(\d+)/);
+our $VERSION=sprintf("%d.%04d", q$Revision: 2008.0728 $ =~ /(\d+)\.(\d+)/);
 
 BEGIN {
 
@@ -30,6 +30,8 @@ BEGIN {
 
 require WWW::YouTube::XML::API;
 
+require IO::File;
+
 require IO::Zlib;
 
 require File::Basename;
@@ -38,9 +40,13 @@ require Date::Format;
 
 require String::Approx;
 
-require XML::TreeBuilder; ## XML::Tree parser
+require XML::TreeBuilder;
+
+require XML::Element;
 
 require XML::Dumper;
+
+require HTTP::Message;
 
 %WWW::YouTube::XML::opts =
 (
@@ -404,8 +410,8 @@ sub WWW::YouTube::XML::example_rating_by_videoid_rating
 
    my $xml_tree = XML::Element->new( '~pi', text => 'xml version="1.0" encoding="UTF-8"' );
 
-   my $entry = XML::Element->new( 'entry', 'xmlns' => "http://www.w3.org/2005/Atom",
-                                           'xmlns:gd' => "http://schemas.google.com/g/2005" );
+   my $entry = XML::Element->new( 'entry', 'xmlns' => 'http://www.w3.org/2005/Atom',
+                                           'xmlns:gd' => 'http://schemas.google.com/g/2005' );
 
    my $gdrating = XML::Element->new( 'gd:rating', 'value' => $rating, 'min' => 1, 'max' => 5 );
 
@@ -430,7 +436,7 @@ sub WWW::YouTube::XML::example_comment_by_videoid_comment
 
    my $xml_tree = XML::Element->new( '~pi', text => 'xml version="1.0" encoding="UTF-8"' );
 
-   my $entry = XML::Element->new( 'entry', 'xmlns' => "http://www.w3.org/2005/Atom" );
+   my $entry = XML::Element->new( 'entry', 'xmlns' => 'http://www.w3.org/2005/Atom' );
 
    my $content = XML::Element->new( 'content', 'type' => 'text' );
 
@@ -457,8 +463,8 @@ sub WWW::YouTube::XML::example_complaint_by_videoid_reason
 
    my $xml_tree = XML::Element->new( '~pi', text => 'xml version="1.0" encoding="UTF-8"' );
 
-   my $entry = XML::Element->new( 'entry', 'xmlns' => "http://www.w3.org/2005/Atom",
-                                           'xmlns:yt' => "http://gdata.youtube.com/schemas/2007" );
+   my $entry = XML::Element->new( 'entry', 'xmlns' => 'http://www.w3.org/2005/Atom',
+                                           'xmlns:yt' => 'http://gdata.youtube.com/schemas/2007' );
 
    my $ytcontent = XML::Element->new( 'yt:content', 'type' => 'text' );
 
@@ -491,8 +497,8 @@ sub WWW::YouTube::XML::example_contact_by_userid_videoid_description
 
    my $xml_tree = XML::Element->new( '~pi', text => 'xml version="1.0" encoding="UTF-8"' );
 
-   my $entry = XML::Element->new( 'entry', 'xmlns' => "http://www.w3.org/2005/Atom",
-                                           'xmlns:yt' => "http://gdata.youtube.com/schemas/2007" );
+   my $entry = XML::Element->new( 'entry', 'xmlns' => 'http://www.w3.org/2005/Atom',
+                                           'xmlns:yt' => 'http://gdata.youtube.com/schemas/2007' );
 
    my $id = XML::Element->new( 'id' );
 
@@ -525,7 +531,7 @@ sub WWW::YouTube::XML::example_favorite_by_userid_videoid
 
    my $xml_tree = XML::Element->new( '~pi', text => 'xml version="1.0" encoding="UTF-8"' );
 
-   my $entry = XML::Element->new( 'entry', 'xmlns' => "http://www.w3.org/2005/Atom" );
+   my $entry = XML::Element->new( 'entry', 'xmlns' => 'http://www.w3.org/2005/Atom' );
 
    my $id = XML::Element->new( 'id' );
 
@@ -552,8 +558,8 @@ sub WWW::YouTube::XML::example_playlist_by_userid_title_description
 
    my $xml_tree = XML::Element->new( '~pi', text => 'xml version="1.0" encoding="UTF-8"' );
 
-   my $entry = XML::Element->new( 'entry', 'xmlns' => "http://www.w3.org/2005/Atom",
-                                           'xmlns:yt' => "http://gdata.youtube.com/schemas/2007" );
+   my $entry = XML::Element->new( 'entry', 'xmlns' => 'http://www.w3.org/2005/Atom',
+                                           'xmlns:yt' => 'http://gdata.youtube.com/schemas/2007' );
 
    my $title = XML::Element->new( 'title', 'type' => 'text' );
 
@@ -580,13 +586,13 @@ sub WWW::YouTube::XML::example_playlist_by_userid_title_description
 ##
 ## Example response
 ##
-sub WWW::YouTube::XML::API::example_response_from_videoid_to_videoid
+sub WWW::YouTube::XML::example_response_from_videoid_to_videoid
 {
    my ( $videoid_from, $videoid_to ) = @_;
 
    my $xml_tree = XML::Element->new( '~pi', text => 'xml version="1.0" encoding="UTF-8"' );
 
-   my $entry = XML::Element->new( 'entry', 'xmlns' => "http://www.w3.org/2005/Atom" );
+   my $entry = XML::Element->new( 'entry', 'xmlns' => 'http://www.w3.org/2005/Atom' );
 
    my $id = XML::Element->new( 'id' );
 
@@ -602,7 +608,130 @@ sub WWW::YouTube::XML::API::example_response_from_videoid_to_videoid
 
    return( $request );
 
-} ## end sub WWW::YouTube::XML::API::example_response_from_videoid_to_videoid
+} ## end sub WWW::YouTube::XML::example_response_from_videoid_to_videoid
+
+##
+## Example upload
+##
+sub WWW::YouTube::XML::example_upload
+{
+   my $h = shift;
+
+   my @required = qw(title description category keywords mimetype filename);
+
+   my $video_example =
+   {
+      'title' => 'Bad Wedding Toast',
+      'description' => 'I gave a bad toast at my friend\'s wedding.',
+      'category' => 'People',
+      'keywords' => 'toast, wedding',
+      'mimetype' => 'video/mp4',
+      'filename' => '/somepath/wedding_toast.mp4',
+
+   };
+
+   foreach my $x ( @required )
+   {
+      next if ( defined( $h->{$x} ) );
+
+      die( "Need to have '$x' defined in example upload call.\n" );
+
+   } ## end foreach
+
+   ##
+   ## API_XML_request
+   ##
+   my $xml_tree = XML::Element->new( '~pi', 'text' => 'xml version="1.0" encoding="UTF-8"' );
+
+   my $entry = XML::Element->new( 'entry', 'xmlns' => 'http://www.w3.org/2005/Atom',
+                                          #'xmlns:yt' => 'http://gdata.youtube.com/schemas/2007',
+                                           'xmlns:media' => 'http://search.yahoo.com/mrss',
+                                );
+
+   my $media_group = XML::Element->new( 'media:group' );
+
+   my $media_title = XML::Element->new( 'media:title', 'type' => 'plain' );
+
+   $media_title->push_content( $h->{'title'} );
+
+   my $media_description = XML::Element->new( 'media:description', 'type' => 'plain' );
+
+   $media_description->push_content( $h->{'description'} );
+
+   my $media_category = XML::Element->new( 'media:category', 'scheme' => 'http://gdata.youtube.com/schemas/2007/categories.cat' );
+
+   $media_category->push_content( $h->{'category'} );
+
+   my $media_keywords = XML::Element->new( 'media:keywords' );
+
+   $media_keywords->push_content( $h->{'keywords'} );
+
+   ##
+   ## media:group
+   ##
+   $media_group->push_content( $media_title );
+
+   $media_group->push_content( $media_description );
+
+   $media_group->push_content( $media_category );
+
+   $media_group->push_content( $media_keywords );
+
+   ##
+   ## entry
+   ##
+   $entry->push_content( $media_group );
+
+   $xml_tree->push_content( $entry );
+
+   ##
+   ## Start the new multipart message:
+   ##
+   my $request = WWW::YouTube::XML::API::upload_by_userid_filename(
+                    'default',
+                    File::Basename::basename( $h->{'filename'} ),
+                    $xml_tree
+                                                                       );
+
+   $xml_tree->delete();
+
+   ##
+   ## add file part
+   ##
+   open( VFH, $h->{'filename'} ) || die 'opening ' . $h->{'filename'} . ":$!\n";
+
+   binmode( VFH );
+
+   my $save_slash = $/;
+
+   undef( $/ );
+
+   my $bfdata = <VFH>;
+
+   $/ = $save_slash;
+
+   $request->add_part( HTTP::Message->new([ 'Content-Type' => $h->{'mimetype'},
+                                            'Content-Transfer-Encoding' => 'binary',
+                                          ], $bfdata ) );
+
+   $request->content_length( length( $request->content() ) );
+
+   ##debug##
+   if ( 0 )
+   {
+      my $fh_out = IO::File->new( 'api_request.bin', 'w' );
+
+      binmode( $fh_out );
+
+      print $fh_out $request->as_string();
+
+      $fh_out->close();
+
+   } ## end if
+
+   return( $request );
+
+} ## end sub WWW::YouTube::XML::example_upload
 
 ##
 ## WWW::YouTube::XML::action_vlbt

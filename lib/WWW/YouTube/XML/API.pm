@@ -11,7 +11,7 @@ use warnings;
 #my $VERSION="0.1";
 
 #For CVS , use following line
-our $VERSION=sprintf("%d.%04d", q$Revision: 2008.0623 $ =~ /(\d+)\.(\d+)/);
+our $VERSION=sprintf("%d.%04d", q$Revision: 2008.0728 $ =~ /(\d+)\.(\d+)/);
 
 BEGIN {
 
@@ -34,6 +34,10 @@ require WWW::YouTube::ML::API; ## NOTE: generic *ML
 require AppConfig::Std;
 
 require URI;
+
+require HTTP::Request;
+
+require HTTP::Message;
 
 require Data::Dumper;
 
@@ -472,6 +476,34 @@ sub WWW::YouTube::XML::API::remove_uploaded_by_userid_videoid
 } ## end sub WWW::YouTube::XML::API::remove_uploaded_by_userid_videoid
 
 ##
+## WWW::YouTube::XML::API::upload_by_userid_filename
+##
+sub WWW::YouTube::XML::API::upload_by_userid_filename
+{
+   my ( $userid, $filename, $xml_tree ) = @_;
+
+   my $request = HTTP::Request->new();
+
+   $request->method( 'POST' );
+   $request->uri( "/feeds/api/users/${userid}/uploads" );
+   $request->protocol( 'HTTP/1.1' );
+
+   $request->header( 'Host' => 'uploads.gdata.youtube.com' );
+   $request->header( 'Slug' => $filename );
+   $request->header( 'Connection' => 'close' );
+
+   $request->content_type( 'multipart/related; boundary="<boundary_string>"' );
+
+   $request->add_part( HTTP::Message->new( ['Content-Type' => 'application/atom+xml; charset=UTF-8'],
+                                           $xml_tree->as_XML()
+                                         )
+                     );
+
+   return( $request );
+
+} ## end sub WWW::YouTube::XML::API::upload_by_userid_filename
+
+##
 ## Browsing with categories and keywords
 ## GET http://gdata.youtube.com/feeds/api/videos/-/categories_or_keywords
 ##
@@ -757,23 +789,11 @@ See: http://code.google.com/apis/youtube/developers_guide_protocol.html#Searchin
 
 =over
 
-   1. Process flow diagrams
-         1. AuthSub authentication
-         2. ClientLogin authentication
-         3. Browser-based upload
-         4. Direct upload
-   2. Technical requirements for uploaded videos
-   3. Assigning developer tags
-   4. Browser-based uploading
-         1. Step 1 - Uploading video metadata
-               1. Variables in the upload request
-         2. Step 2 - Extracting values from the API response
-         3. Step 3 - Uploading the video file
-   5. Direct uploading
-         1. Sending an Upload API Request
-               1. Variables in the upload request
-         2. Handling the Upload API Response
-   6. Checking the status of an uploaded video
+$request = WWW::YouTube::XML::API::upload_by_userid_filename( $userid, $filename, $xml_tree );
+
+## ADD FILE PART ## See WWW::YouTube::XML::example_upload
+
+$result = WWW::YouTube::XML::API::ua_request( $request );
 
 =back
 

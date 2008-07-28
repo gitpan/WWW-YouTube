@@ -15,7 +15,7 @@ Version 0.01
 
 #our $VERSION = '0.01';
 #For CVS , use following line
-our $VERSION=sprintf("%d.%04d", q$Revision: 2008.0623 $ =~ /(\d+)\.(\d+)/);
+our $VERSION=sprintf("%d.%04d", q$Revision: 2008.0728 $ =~ /(\d+)\.(\d+)/);
 
 =head1 SYNOPSIS
 
@@ -68,13 +68,13 @@ sub accountType {
 
 }
 
-=head2 Username (required)
+=head2 Email (required)
 
-Username used as the login for the requested service.
+Email address used as the login for the requested service.
 
-=head2 Password (required)
+=head2 Passwd (required)
 
-Password used for the login for the requested service.
+Password used for the Email login for the requested service.
 
 =head2 service (required)
 
